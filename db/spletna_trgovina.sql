@@ -94,7 +94,7 @@ CREATE TABLE `uporabnik` (
 
 LOCK TABLES `uporabnik` WRITE;
 /*!40000 ALTER TABLE `uporabnik` DISABLE KEYS */;
-INSERT INTO `uporabnik` VALUES (1,'administrator','lenart','gazvoda','gazvoda@localhost.com','admin',NULL,NULL,'aktiven'),(2,'administrator','mihael','podplatnik','podplatnik@localhost.com','admin',NULL,NULL,'aktiven'),(3,'prodajalec','joze','novak','novak@localhost.com','prodajalec',NULL,NULL,'aktiven'),(4,'prodajalec','tanja','zupancic','zupancic@localhost.com','prodajalec',NULL,NULL,'neaktiven'),(5,'stranka','miha','pecnik','pecnik@localhost.com','stranka',51051051,'Naslov 1, 1000 Ljubljana, Slovenija','aktiven'),(6,'stranka','jan','hartman','hartman@localhost.com','stranka',31031031,'Naslov 2, 8000 Novo mesto, Slovenija','neaktiven');
+INSERT INTO `uporabnik` VALUES (1,'administrator','lenart','gazvoda','gazvoda@localhost.com','$2y$10$qUlo2cP8VwUrsOD3yLocoe87XbUgqnoJrC4u.iJooYRrLXsWxHcwS',NULL,NULL,'aktiven'),(2,'administrator','mihael','podplatnik','podplatnik@localhost.com','$2y$10$AkrFtpM0Fvp/sxOsD6s69uV67QF7e9FPPmLzAD4D1awgTbDTBwq6C',NULL,NULL,'aktiven'),(3,'prodajalec','joze','novak','novak@localhost.com','$2y$10$qPinrBoQAaq/.gY447lceuLW7Icbx05OlBtFw3d7ytz8J5oRGnlA2',NULL,NULL,'aktiven'),(4,'prodajalec','tanja','zupancic','zupancic@localhost.com','$2y$10$w3ds6KZiElD08u9ryUhU3ugK2946SL8ZcdMF1Zqp.9DSJbfNOgkSC',NULL,NULL,'neaktiven'),(5,'stranka','miha','pecnik','pecnik@localhost.com','$2y$10$z8mm21WvHLuxr9FW0jnQHe4iYsIZvr4N7qBNmZqqFdsLshgHxsoXO',51051051,'Naslov 1, 1000 Ljubljana, Slovenija','aktiven'),(6,'stranka','jan','hartman','hartman@localhost.com','$2y$10$gYfjopGSMcJWkjg/sh3CI.OnJLXwNkPqisx/u1yC.3cq3HkgoW6k2',31031031,'Naslov 2, 8000 Novo mesto, Slovenija','neaktiven');
 /*!40000 ALTER TABLE `uporabnik` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -107,4 +107,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-08-14 17:32:30
+-- Dump completed on 2018-08-14 21:40:32
