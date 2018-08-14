@@ -18,6 +18,15 @@ class DBSpletna {
 
         return $statement->fetchAll();
     }
+    
+    public static function getAllArticles() {
+        $db = DBInit::getInstance();
+        
+        $statement = $db->prepare("SELECT id, ime, opis, cena, zaloga FROM artikel");
+        $statement->execute();
+        
+        return $statement->fetchAll();
+    }
 /*
     public static function getAllRole($user_role) {
         $db = DBInit::getInstance();
