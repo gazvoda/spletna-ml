@@ -27,6 +27,16 @@ class DBSpletna {
         
         return $statement->fetchAll();
     }
+    
+    public static function getArticle($id) {
+        $db = DBInit::getInstance();
+        
+        $statement = $db->prepare("SELECT id, ime, opis, cena, zaloga FROM artikel WHERE id = :id");
+        $statement->bindParam(":id", $id);
+        $statement->execute();
+        
+        return $statement->fetchAll();
+    }
 /*
     public static function getAllRole($user_role) {
         $db = DBInit::getInstance();
@@ -73,16 +83,16 @@ class DBSpletna {
         
         $statement->execute();
     }
-
-    public static function updatePassword($user_id, $password) {
+*/
+    public static function updatePassword($id, $geslo) {
         $db = DBInit::getInstance();
 
-        $statement = $db->prepare("UPDATE user SET password = :password WHERE user_id =:user_id");
-        $statement->bindParam(":password", $password);
-        $statement->bindParam(":user_id", $user_id, PDO::PARAM_INT);
+        $statement = $db->prepare("UPDATE uporabnik SET geslo = :geslo WHERE id =:id");
+        $statement->bindParam(":geslo", $geslo);
+        $statement->bindParam(":id", $id, PDO::PARAM_INT);
         $statement->execute();
     }
-    
+/*    
     public static function updateFirstName($user_id, $first_name) {
         $db = DBInit::getInstance();
 

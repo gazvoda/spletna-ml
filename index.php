@@ -53,25 +53,25 @@ if ($isPost) {
         if ($isPost) {
             if ($allowAccess) {
                 //echo "Dobrodošli na skrivni strani!";
-                //var_dump($user);
+                //var_dump($uporabnik);
                 session_start();
                 // Store Session Data
                 //echo "$user[role]";
-                $_SESSION['uporabnik_vloga']= $user['vloga'];  // Initializing Session with value of PHP Variable
-                $_SESSION['uporabnik_id'] = $user['id'];
-                $_SESSION['uporabnik_email'] = $user['email'];
+                $_SESSION['uporabnik_vloga']= $uporabnik['vloga'];  // Initializing Session with value of PHP Variable
+                $_SESSION['uporabnik_id'] = $uporabnik['id'];
+                $_SESSION['uporabnik_email'] = $uporabnik['email'];
                 //var_dump($_SESSION);
                 switch ($_SESSION['uporabnik_vloga']) {
                     case "administrator":
-                        header("Location: certs/prijava-cert.php");
+                        header("Location: certs/doma.php");
                         exit();
                         break;
                     case "prodajalec":
-                        header("Location: certs/prijava-cert.php");
+                        header("Location: certs/doma.php");
                         exit();
                         break;
                     case "stranka":
-                        header("Location: prijava-stranka.php");
+                        header("Location: doma-stranka.php");
                         exit();
                         break;
                     default:
@@ -87,8 +87,10 @@ if ($isPost) {
                 <input type="submit" value="Prijava">
             </form>
             <?php
-                $articles = DBSpletna::getAllArticles();
-                var_dump($articles);
+                // $articles = DBSpletna::getAllArticles();
+                // var_dump($articles);
+                
+                // DBSpletna::updatePassword(6, password_hash("stranka", PASSWORD_DEFAULT));
             ?>
             <?php
         }
