@@ -19,6 +19,16 @@ class DBSpletna {
         return $statement->fetchAll();
     }
     
+    public static function getUser($id) {
+        $db = DBInit::getInstance();
+
+        $statement = $db->prepare("SELECT id, vloga, ime, priimek, email, telefon, naslov, status FROM uporabnik WHERE id = :id");
+        $statement->bindParam(":id", $id);
+        $statement->execute();
+        
+        return $statement->fetchAll();
+    }
+    
     public static function getAllArticles() {
         $db = DBInit::getInstance();
         
@@ -122,52 +132,50 @@ class DBSpletna {
         $statement->bindParam(":stranka", $stranka);
         $statement->execute();
     }
-/*    
-    public static function updateFirstName($user_id, $first_name) {
+
+    public static function updateFirstName($id, $ime) {
         $db = DBInit::getInstance();
 
-        $statement = $db->prepare("UPDATE user SET first_name = :first_name WHERE user_id =:user_id");
-        $statement->bindParam(":first_name", $first_name);
-        $statement->bindParam(":user_id", $user_id, PDO::PARAM_INT);
-        $statement->execute();
-    }
-  /*   
-    public static function updateLastName($user_id, $last_name) {
-        $db = DBInit::getInstance();
-
-        $statement = $db->prepare("UPDATE user SET last_name = :last_name WHERE user_id =:user_id");
-        $statement->bindParam(":last_name", $last_name);
-        $statement->bindParam(":user_id", $user_id, PDO::PARAM_INT);
+        $statement = $db->prepare("UPDATE uporabnik SET ime = :ime WHERE id =:id");
+        $statement->bindParam(":ime", $ime);
+        $statement->bindParam(":id", $id, PDO::PARAM_INT);
         $statement->execute();
     }
     
-    public static function updateEmail($user_id, $email) {
+    public static function updateLastName($id, $priimek) {
         $db = DBInit::getInstance();
 
-        $statement = $db->prepare("UPDATE user SET email = :email WHERE user_id =:user_id");
+        $statement = $db->prepare("UPDATE uporabnik SET priimek = :priimek WHERE id =:id");
+        $statement->bindParam(":priimek", $priimek);
+        $statement->bindParam(":id", $id, PDO::PARAM_INT);
+        $statement->execute();
+    }
+    
+    public static function updateEmail($id, $email) {
+        $db = DBInit::getInstance();
+
+        $statement = $db->prepare("UPDATE uporabnik SET email = :email WHERE id =:id");
         $statement->bindParam(":email", $email);
-        $statement->bindParam(":user_id", $user_id, PDO::PARAM_INT);
+        $statement->bindParam(":id", $id, PDO::PARAM_INT);
         $statement->execute();
     }
     
-    public static function updatePhone($user_id, $phone) {
+    public static function updatePhone($id, $telefon) {
         $db = DBInit::getInstance();
 
-        $statement = $db->prepare("UPDATE user SET phone = :phone WHERE user_id =:user_id");
-        $statement->bindParam(":phone", $phone);
-        $statement->bindParam(":user_id", $user_id, PDO::PARAM_INT);
+        $statement = $db->prepare("UPDATE uporabnik SET telefon = :telefon WHERE id =:id");
+        $statement->bindParam(":telefon", $telefon);
+        $statement->bindParam(":id", $id, PDO::PARAM_INT);
         $statement->execute();
     }
     
-    public static function updateAddress($user_id, $address) {
+    public static function updateAddress($id, $naslov) {
         $db = DBInit::getInstance();
 
-        $statement = $db->prepare("UPDATE user SET address = :first_name WHERE user_id =:user_id");
-        $statement->bindParam(":address", $address);
-        $statement->bindParam(":user_id", $user_id, PDO::PARAM_INT);
+        $statement = $db->prepare("UPDATE uporabnik SET naslov = :naslov WHERE id =:id");
+        $statement->bindParam(":naslov", $naslov);
+        $statement->bindParam(":id", $id, PDO::PARAM_INT);
         $statement->execute();
     }
-*/
-    
     
 }
