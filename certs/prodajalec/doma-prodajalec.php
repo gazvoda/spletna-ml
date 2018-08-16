@@ -62,7 +62,7 @@ require_once '../../db/database_spletna.php';
             <?php
             try {
                 DBSpletna::updateRacunStatus($_POST["id"]);
-                echo "Šala uspešno posodobljena. <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
+                echo "Račun uspešno potrjen. <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
             } catch (Exception $e) {
                 echo "<p>Napaka pri potrjevanju: {$e->getMessage()}.</p>";
             }
