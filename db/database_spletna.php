@@ -92,6 +92,16 @@ class DBSpletna {
         $statement->bindParam(":id", $id, PDO::PARAM_INT);
         $statement->execute();
     }
+    
+    public static function insertOrder($postavka, $neobdelano, $stranka) {
+        $db = DBInit::getInstance();
+        
+        $statement = $db->prepare("INSERT INTO racun (postavka, status, stranka_id) VALUES (:postavka, :status, :stranka)");
+        $statement->bindParam(":postavka", $postavka);
+        $statement->bindParam(":status", $neobdelano);
+        $statement->bindParam(":stranka", $stranka);
+        $statement->execute();
+    }
 /*    
     public static function updateFirstName($user_id, $first_name) {
         $db = DBInit::getInstance();
@@ -101,7 +111,7 @@ class DBSpletna {
         $statement->bindParam(":user_id", $user_id, PDO::PARAM_INT);
         $statement->execute();
     }
-    
+  /*   
     public static function updateLastName($user_id, $last_name) {
         $db = DBInit::getInstance();
 
