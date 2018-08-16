@@ -66,7 +66,16 @@ require_once '../../db/database_spletna.php';
             } catch (Exception $e) {
                 echo "<p>Napaka pri potrjevanju: {$e->getMessage()}.</p>";
             }
-
+        elseif (isset($_POST["do"]) && $_POST["do"] == "zavrni"):
+            ?>
+            <h1>Obvestilo!</h1>
+            <?php
+            try {
+                DBSpletna::updateRacunStatus2($_POST["id"]);
+                echo "Naročilo je bilo zavrnjeno!. <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
+            } catch (Exception $e) {
+                echo "<p>Napaka pri zavrnitvi računa!: {$e->getMessage()}.</p>";
+            }
         // PRIKAZ VSEH ZAPISOV
         else:
             ?>
@@ -93,6 +102,11 @@ require_once '../../db/database_spletna.php';
                         <input type="hidden" name="id" value="<?= $row["id"] ?>" />
                         <input type="hidden" name="do" value="edit" />
                         <input type="submit" value="Potrdi" />
+                    </form>
+                    <form action="<?= $url ?>" method="post">
+                        <input type="hidden" name="id" value="<?= $row["id"] ?>" />
+                        <input type="hidden" name="do" value="zavrni" />
+                        <input type="submit" value="Zavrni" />
                     </form>
                     <?php
                 }

@@ -187,5 +187,14 @@ class DBSpletna {
         $statement->bindParam(":id", $id, PDO::PARAM_INT);
         $statement->execute();
     }
+    public static function updateRacunStatus2($id) {
+        $db = DBInit::getInstance();
+        $status = "zavrnjeno";
+        
+        $statement = $db->prepare("UPDATE racun SET status = :status WHERE id =:id");
+        $statement->bindParam(":status", $status);
+        $statement->bindParam(":id", $id, PDO::PARAM_INT);
+        $statement->execute();
+    }
     
 }
