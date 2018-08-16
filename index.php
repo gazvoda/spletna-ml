@@ -63,11 +63,11 @@ if ($isPost) {
                 //var_dump($_SESSION);
                 switch ($_SESSION['uporabnik_vloga']) {
                     case "administrator":
-                        header("Location: certs/doma.php");
+                        header("Location: certs/prijava-cert.php");
                         exit();
                         break;
                     case "prodajalec":
-                        header("Location: certs/doma.php");
+                        header("Location: certs/prijava-cert.php");
                         exit();
                         break;
                     case "stranka":

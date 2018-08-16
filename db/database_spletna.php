@@ -41,7 +41,7 @@ class DBSpletna {
     public static function getAllRole($vloga) {
         $db = DBInit::getInstance();
 
-        $statement = $db->prepare("SELECT id, vloga, ime, priimek, email "
+        $statement = $db->prepare("SELECT id, vloga, ime, priimek, email, status "
                 . "FROM uporabnik WHERE vloga = :vloga");
         $statement->bindParam(":vloga", $vloga);
         $statement->execute();
