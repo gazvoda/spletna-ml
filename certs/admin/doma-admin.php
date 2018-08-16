@@ -24,7 +24,7 @@ require_once '../../db/database_spletna.php';
         <form action="nastavitve.php" method="get">
             <input type="submit" value="Nastavitve">
         </form>
-        <form action="../odjava.php" method="get">
+        <form action="../../odjava.php" method="get">
             <input type="submit" value="Odjava">
         </form>
     
@@ -92,7 +92,7 @@ require_once '../../db/database_spletna.php';
                 <input type="submit" value="Briši" />
             </form>		
             <?php
-        // POSODABLJANJE ZAPISA IMENA PRODAJALCA V PB
+        // posodabljanje zapisa IMENA prodajalca v pb
         elseif (isset($_POST["do"]) && $_POST["do"] == "edit_ime"):
             ?>
             <h1>Posodobitev zapisa</h1>
@@ -107,6 +107,52 @@ require_once '../../db/database_spletna.php';
                 echo "<p>Napaka pri zapisu: {$e->getMessage()}.</p>";
             }
 
+        // posodabljanje zapisa PRIIMKA prodajalca v pb
+        elseif (isset($_POST["do"]) && $_POST["do"] == "edit_priimek"):
+            ?>
+            <h1>Posodobitev zapisa</h1>
+            <?php
+            try {
+                // var_dump($_POST);
+                // var_dump($_SESSION["ime_prodajalca"]);
+                // die();
+                DBSpletna::updateLastName($_POST["id"], $_POST["priimek_prodajalca"]);
+                echo "Priimek uspešno posodobljen. <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
+            } catch (Exception $e) {
+                echo "<p>Napaka pri zapisu: {$e->getMessage()}.</p>";
+            }
+        
+        // posodabljanje zapisa EMAILA prodajalca v pb
+        elseif (isset($_POST["do"]) && $_POST["do"] == "edit_email"):
+            ?>
+            <h1>Posodobitev zapisa</h1>
+            <?php
+            try {
+                // var_dump($_POST);
+                // var_dump($_SESSION["ime_prodajalca"]);
+                // die();
+                DBSpletna::updateEmail($_POST["id"], $_POST["email_prodajalca"]);
+                echo "Email uspešno posodobljen. <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
+            } catch (Exception $e) {
+                echo "<p>Napaka pri zapisu: {$e->getMessage()}.</p>";
+            }
+            
+        // posodabljanje zapisa GESLA prodajalca v pb
+        elseif (isset($_POST["do"]) && $_POST["do"] == "edit_geslo"):
+            ?>
+            <h1>Posodobitev zapisa</h1>
+            <?php
+            try {
+                // var_dump($_POST);
+                // var_dump($_SESSION["ime_prodajalca"]);
+                // die();
+                // password_hash("stranka", PASSWORD_DEFAULT)
+                DBSpletna::updatePassword($_POST["id"], password_hash($_POST["geslo_prodajalca"], PASSWORD_DEFAULT));
+                echo "Geslo uspešno posodobljeno. <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
+            } catch (Exception $e) {
+                echo "<p>Napaka pri zapisu: {$e->getMessage()}.</p>";
+            }
+            
         // VNOS ZAPISA V PB
         elseif (isset($_POST["do"]) && $_POST["do"] == "add"):
             ?>
