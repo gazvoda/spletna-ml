@@ -13,7 +13,7 @@ echo "Dobrodosli v Spletni trgovini - ML!";
 // var_dump($_SESSION);
 
 $artikli = DBSpletna::getAllArticles();
-var_dump($artikli);
+//var_dump($artikli);
 
 $url = filter_input(INPUT_SERVER, "PHP_SELF", FILTER_SANITIZE_SPECIAL_CHARS);
 $validationRules = ['do' => [
@@ -36,8 +36,10 @@ $data = filter_input_array(INPUT_POST, $validationRules);
 switch ($data["do"]) {
     case "add_into_cart":
         try {
-            $artikel = DBSpletna::getArticle($data["id"]);
-            
+            // var_dump(DBSpletna::getArticle($data["id"]));
+            $artikel = DBSpletna::getArticle($data["id"])[0];
+            // var_dump($artikel);
+            // var_dump(DBSpletna::getAllArticles());
             if (isset($_SESSION["cart"][$artikel['id']])) {
                 $_SESSION["cart"][$artikel['id']] ++;
             } else {
@@ -92,12 +94,14 @@ switch ($data["do"]) {
 
             <?php
             $kosara = isset($_SESSION["cart"]) ? $_SESSION["cart"] : [];
-
+            // var_dump($kosara);
+            // var_dump($artikel);
+            // var_dump($_SESSION);
             if ($kosara):
                 $znesek = 0;
 
                 foreach ($kosara as $id => $kolicina):
-                    $knjiga = DBSpletna::getArticle($id);
+                    $artikel = DBSpletna::getArticle($id)[0];
                     $znesek += $artikel['cena'] * $kolicina;
                     ?>
                     <form action="<?= $url ?>" method="post">
