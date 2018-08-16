@@ -61,8 +61,7 @@ class DBSpletna {
     public static function getAllOrders() {
         $db = DBInit::getInstance();
 
-        $statement = $db->prepare("SELECT id, postavka, status, id_stranka"
-                . "FROM racun");
+        $statement = $db->prepare("SELECT id, postavka, status, stranka_id FROM racun");
         $statement->execute();
 
         return $statement->fetchAll();
