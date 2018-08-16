@@ -37,17 +37,29 @@ class DBSpletna {
         
         return $statement->fetchAll();
     }
-/*
-    public static function getAllRole($user_role) {
+
+    public static function getAllRole($vloga) {
         $db = DBInit::getInstance();
 
-        $statement = $db->prepare("SELECT user_id, role, first_name, last_name, email FROM user WHERE user_role = :user_role");
-        $statement->bindParam(":user_role", $user_role);
+        $statement = $db->prepare("SELECT id, vloga, ime, priimek, email "
+                . "FROM user WHERE vloga = :vloga");
+        $statement->bindParam(":vloga", $vloga);
         $statement->execute();
 
         return $statement->fetchAll();
     }
+    
+    public static function getAllCustomers() {
+        $db = DBInit::getInstance();
 
+        $statement = $db->prepare("SELECT id, vloga, ime, priimek, email, telefon, naslov status "
+                . "FROM uporabnik WHERE vloga = 'stranka'");
+        $statement->execute();
+
+        return $statement->fetchAll();
+    }
+    
+/*
     public static function delete($user_id) {
         $db = DBInit::getInstance();
 
