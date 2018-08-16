@@ -42,7 +42,7 @@ class DBSpletna {
         $db = DBInit::getInstance();
 
         $statement = $db->prepare("SELECT id, vloga, ime, priimek, email "
-                . "FROM user WHERE vloga = :vloga");
+                . "FROM uporabnik WHERE vloga = :vloga");
         $statement->bindParam(":vloga", $vloga);
         $statement->execute();
 
@@ -54,6 +54,15 @@ class DBSpletna {
 
         $statement = $db->prepare("SELECT id, vloga, ime, priimek, email, telefon, naslov status "
                 . "FROM uporabnik WHERE vloga = 'stranka'");
+        $statement->execute();
+
+        return $statement->fetchAll();
+    }
+    public static function getAllOrders() {
+        $db = DBInit::getInstance();
+
+        $statement = $db->prepare("SELECT id, postavka, status, id_stranka"
+                . "FROM racun");
         $statement->execute();
 
         return $statement->fetchAll();
