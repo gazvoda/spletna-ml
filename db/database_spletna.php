@@ -131,6 +131,14 @@ class DBSpletna {
         $statement->bindParam(":id", $id, PDO::PARAM_INT);
         $statement->execute();
     }
+    public static function updateUserStatus($id, $status) {
+        $db = DBInit::getInstance();
+
+        $statement = $db->prepare("UPDATE uporabnik SET status = :status WHERE id =:id");
+        $statement->bindParam(":status", $status);
+        $statement->bindParam(":id", $id, PDO::PARAM_INT);
+        $statement->execute();
+    }
     /*** UPORABNIK - end ***/
     
     /*** ARTIKEL - start ***/

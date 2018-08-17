@@ -112,6 +112,7 @@ require_once '../../db/database_spletna.php';
             $email = $stranka["email"];
             $telefon = $stranka["telefon"];
             $naslov = $stranka["naslov"];
+            $status = $stranka["status"];
             ?>
             <h2>Urejanje zapisa id = <?= $id ?></h2>
             <form action="<?= $_SERVER["PHP_SELF"] ?>" method="post">
@@ -154,8 +155,23 @@ require_once '../../db/database_spletna.php';
             <h2>Izbris prodajalca</h2>
             <form action="<?= $_SERVER["PHP_SELF"] ?>" method="post">
                 <input type="hidden" name="id" value="<?= $id ?>" />
-                <input type="hidden" name="do" value="delete_stranka" />
-                <input type="submit" value="Briši" />
+                <!--- depending on user account status, change between "aktiviraj" in "deaktiviraj" --->
+                <?php
+                    switch ($status) {
+                    case "aktiven":
+                        $gumb_value = "Deaktiviraj";
+                        $gumb_action = "deaktiviraj_stranko";
+                        break;
+                    case "neaktiven":
+                        $gumb_value = "Aktiviraj";
+                        $gumb_action = "aktiviraj_stranko";
+                        break;
+                    default:
+                        break;
+                    }
+                ?>
+                <input type="hidden" name="do" value="<?= $gumb_action ?>" />
+                <input type="submit" value="<?= $gumb_value ?>" />
             </form>		
             <?php    
         
@@ -281,22 +297,35 @@ require_once '../../db/database_spletna.php';
             <?php
             try {
                 DBSpletna::updateAddress($_POST["id"], $_POST["naslov_stranke"]);
-                echo "Naslov uspešno posodobljeno. <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
+                echo "Naslov uspešno posodobljen. <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
             } catch (Exception $e) {
                 echo "<p>Napaka pri zapisu: {$e->getMessage()}.</p>";
             }
 
-        // BRISANJE ZAPISA IZ PB: brisanje stranke - DONE!!!
-        elseif (isset($_POST["do"]) && $_POST["do"] == "delete_stranka"):
+        // deaktiviranje stranke - TODO!!!
+        elseif (isset($_POST["do"]) && $_POST["do"] == "deaktiviraj_stranko"):
             ?>
-            <h1>Brisanje stranke</h1>
+            <h1>Deaktiviranje uporabniškega računa stranke</h1>
             <?php
             try {
-                DBSpletna::deleteUser($_POST["id"]);
+                DBSpletna::updateUserStatus($_POST["id"], "neaktiven");
                 $id_str = $_POST["id"];
-                echo "Stranka $id_str uspešno odstranjen. <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
+                echo "Stranka $id_str uspešno deaktivirana. <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
             } catch (Exception $e) {
-                echo "<p>Napaka pri brisanju: {$e->getMessage()}.</p>";
+                echo "<p>Napaka pri deaktiviranju: {$e->getMessage()}.</p>";
+            }
+            
+        // aktiviranje stranke - TODO!!!
+        elseif (isset($_POST["do"]) && $_POST["do"] == "aktiviraj_stranko"):
+            ?>
+            <h1>Aktiviranje uporabniškega računa stranke</h1>
+            <?php
+            try {
+                DBSpletna::updateUserStatus($_POST["id"], "aktiven");
+                $id_str = $_POST["id"];
+                echo "Stranka $id_str uspešno aktivirana. <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
+            } catch (Exception $e) {
+                echo "<p>Napaka pri aktiviranju: {$e->getMessage()}.</p>";
             }
         
         // edit narocilo - DONE!!!
