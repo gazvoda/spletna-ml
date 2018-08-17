@@ -62,7 +62,7 @@ class DBSpletna {
     public static function getAllCustomers() {
         $db = DBInit::getInstance();
 
-        $statement = $db->prepare("SELECT id, vloga, ime, priimek, email, telefon, naslov status "
+        $statement = $db->prepare("SELECT id, vloga, ime, priimek, email, telefon, naslov, status "
                 . "FROM uporabnik WHERE vloga = 'stranka'");
         $statement->execute();
 
