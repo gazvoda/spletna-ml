@@ -31,231 +31,274 @@ require_once '../../db/database_spletna.php';
                 <input type="submit" value="Shrani" />
             </form>
             <?php
-        // stranka - TODO!!!
+        // stranka - DONE!!!
         elseif (isset($_GET["do"]) && $_GET["do"] == "add_stranka"):
             ?>
-            <h1>Dodajanje</h1>
+            <h1>Dodaj stranke</h1>
             <form action="<?= $_SERVER["PHP_SELF"] ?>" method="post">
-                <input type="hidden" name="do" value="add" />
-                Datum: <input type="text" name="joke_date" value="<?= date("Y-m-d") ?>" /><br />
-                <textarea rows="8" cols="60" name="joke_text"></textarea><br />
-                <input type="submit" value="Shrani" />
+                <input type="hidden" name="do" value="add_stranka" />
+                <input type="text" name="ime_stranke" placeholder="Ime" /><br />
+                <input type="text" name="priimek_stranke" placeholder="Priimek" /><br />
+                <input type="text" name="email_stranke" placeholder="Email" /><br />
+                <input type="password" name="geslo_stranke" placeholder="Geslo" /><br />
+                <input type="text" name="telefon_stranke" placeholder="Telefon" /><br />
+                <textarea rows="5" cols="20" name="naslov_stranke" placeholder="Naslov"></textarea><br />
+                <input type="submit" value="Dodaj" />
             </form>
             <?php    
             
         // UREJANJE -- ZASLONSKA MASKA
-        // artikel - TODO!!!
+        // artikel - DONE!!!
         elseif (isset($_GET["do"]) && $_GET["do"] == "edit_artikel"):
             ?>
             <h1>Urejanje</h1>
             <?php
             try {
-                $joke = DBJokes::get($_GET["id"]); // POIZVEDBA V PB
-                $order = DBSpletna::getAllOrders();
+                $artikel = DBSpletna::getArticle($_GET["id"])[0]; // POIZVEDBA V PB
+                //var_dump($artikel);
+                //die();
             } catch (Exception $e) {
-                echo "Napaka pri poizvedbi GET ALL ORDERS: " . $e->getMessage();
+                echo "Napaka pri poizvedbi: " . $e->getMessage();
             }
-            $id = $order["id"];
-            $postavka = $order["postavka"]; 
-            $status = $order["status"];
-            $id_stranka = $order["id_stranka"];
-            
-            $date = $joke["joke_date"];
-            $text = $joke["joke_text"];
+            $id = $artikel["id"];
+            $ime = $artikel["ime"]; 
+            $opis = $artikel["opis"];
+            $cena = $artikel["cena"];
             ?>
             <h2>Urejanje zapisa id = <?= $id ?></h2>
             <form action="<?= $_SERVER["PHP_SELF"] ?>" method="post">
                 <input type="hidden" name="id" value="<?= $id ?>" />
-                <input type="hidden" name="do" value="edit" />
-                Datum: <input type="text" name="joke_date" value="<?= $date ?>" /><br />
-                <textarea rows="8" cols="60" name="joke_text"><?= $text ?></textarea><br />
+                <input type="hidden" name="do" value="edit_artikel_ime" />
+                <input type="text" name="ime_artikla" value="<?= $ime ?>" />
+                <input type="submit" value="Shrani" />
+            </form>
+            <form action="<?= $_SERVER["PHP_SELF"] ?>" method="post">
+                <input type="hidden" name="id" value="<?= $id ?>" />
+                <input type="hidden" name="do" value="edit_artikel_opis" />
+                <textarea rows="7" cols="20" name="opis_artikla"><?= $opis ?></textarea>
+                <input type="submit" value="Shrani" />
+            </form>
+            <form action="<?= $_SERVER["PHP_SELF"] ?>" method="post">
+                <input type="hidden" name="id" value="<?= $id ?>" />
+                <input type="hidden" name="do" value="edit_artikel_cena" />
+                <!--- maybe TODO!!! - maybe CHANGE CENA TO INPUT TYPE NUMBER --->
+                <input type="text" name="cena_artikla" value="<?= $cena ?>" />
                 <input type="submit" value="Shrani" />
             </form>
 
             <h2>Izbris zapisa</h2>
             <form action="<?= $_SERVER["PHP_SELF"] ?>" method="post">
                 <input type="hidden" name="id" value="<?= $id ?>" />
-                <input type="hidden" name="do" value="delete" />
+                <input type="hidden" name="do" value="delete_artikel" />
                 <input type="submit" value="Briši" />
             </form>		
             <?php
         
-        // stranka - TODO!!!
+        // stranka - DONE!!!
         elseif (isset($_GET["do"]) && $_GET["do"] == "edit_stranka"):
             ?>
             <h1>Urejanje</h1>
             <?php
             try {
-                $prodajalec = DBSpletna::getUser($_GET["id"])[0]; // POIZVEDBA V PB
+                $stranka = DBSpletna::getUser($_GET["id"])[0]; // POIZVEDBA V PB
                 //var_dump($prodajalec);
             } catch (Exception $e) {
                 echo "Napaka pri poizvedbi: " . $e->getMessage();
             }
 
-            $id = $prodajalec["id"];
-            $ime = $prodajalec["ime"];
-            $priimek = $prodajalec["priimek"];
-            $email = $prodajalec["email"];
+            $id = $stranka["id"];
+            $ime = $stranka["ime"];
+            $priimek = $stranka["priimek"];
+            $email = $stranka["email"];
+            $telefon = $stranka["telefon"];
+            $naslov = $stranka["naslov"];
             ?>
             <h2>Urejanje zapisa id = <?= $id ?></h2>
             <form action="<?= $_SERVER["PHP_SELF"] ?>" method="post">
                 <input type="hidden" name="id" value="<?= $id ?>" />
                 <input type="hidden" name="do" value="edit_ime" />
-                <input type="text" name="ime_prodajalca" placeholder="Ime" />
+                <input type="text" name="ime_stranke" value="<?= $ime ?>" />
                 <input type="submit" value="Spremeni" />
             </form>
             <form action="<?= $_SERVER["PHP_SELF"] ?>" method="post">
                 <input type="hidden" name="id" value="<?= $id ?>" />
                 <input type="hidden" name="do" value="edit_priimek" />
-                <input type="text" name="priimek_prodajalca" placeholder="Priimek" />
+                <input type="text" name="priimek_stranke" value="<?= $priimek ?>" />
                 <input type="submit" value="Spremeni" />
             </form>
             <form action="<?= $_SERVER["PHP_SELF"] ?>" method="post">
                 <input type="hidden" name="id" value="<?= $id ?>" />
                 <input type="hidden" name="do" value="edit_email" />
-                <input type="text" name="email_prodajalca" placeholder="Email" />
+                <input type="text" name="email_stranke" value="<?= $email ?>" />
                 <input type="submit" value="Spremeni" />
             </form>
             <form action="<?= $_SERVER["PHP_SELF"] ?>" method="post">
                 <input type="hidden" name="id" value="<?= $id ?>" />
                 <input type="hidden" name="do" value="edit_geslo" />
-                <input type="password" name="geslo_prodajalca" placeholder="Geslo" />
+                <input type="password" name="geslo_stranke" placeholder="Geslo" />
+                <input type="submit" value="Spremeni" />
+            </form>
+            <form action="<?= $_SERVER["PHP_SELF"] ?>" method="post">
+                <input type="hidden" name="id" value="<?= $id ?>" />
+                <input type="hidden" name="do" value="edit_telefon" />
+                <input type="text" name="telefon_stranke" value="<?= $telefon ?>" />
+                <input type="submit" value="Spremeni" />
+            </form>
+            <form action="<?= $_SERVER["PHP_SELF"] ?>" method="post">
+                <input type="hidden" name="id" value="<?= $id ?>" />
+                <input type="hidden" name="do" value="edit_naslov" />
+                <textarea rows="5" cols="20" name="naslov_stranke"><?= $naslov ?></textarea>
                 <input type="submit" value="Spremeni" />
             </form>
 
             <h2>Izbris prodajalca</h2>
             <form action="<?= $_SERVER["PHP_SELF"] ?>" method="post">
                 <input type="hidden" name="id" value="<?= $id ?>" />
-                <input type="hidden" name="do" value="delete" />
+                <input type="hidden" name="do" value="delete_stranka" />
                 <input type="submit" value="Briši" />
             </form>		
             <?php    
         
             
         // POSODABLJANJE ZAPISA V PB
-        // dodaj artikel - TODO!!!
+        // dodaj artikel - DONE!!!
         elseif (isset($_POST["do"]) && $_POST["do"] == "add_artikel"):
             ?>
-            <h1>Vnašanje zapisa</h1>
+            <h1>Vnašanje artikla</h1>
             <?php
             try {
-                DBSpletna::insertProdajalec($_POST["ime_prodajalca"], $_POST["priimek_prodajalca"], $_POST["email_prodajalca"], password_hash($_POST["geslo_prodajalca"], PASSWORD_DEFAULT));              
+                DBSpletna::insertArticle($_POST["ime_artikla"], $_POST["opis_artikla"], $_POST["cena_artikla"]);              
                 echo "Artikel uspešno dodan! <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
             } catch (Exception $e) {
                 echo "<p>Napaka pri dodajanju artikla: {$e->getMessage()}.</p>";
             }
 
-        // edit artikel - TODO!!!
-        elseif (isset($_POST["do"]) && $_POST["do"] == "edit_artikel"):
+        // edit artikel IME - DONE!!!
+        elseif (isset($_POST["do"]) && $_POST["do"] == "edit_artikel_ime"):
             ?>
             <h1>Obvestilo!</h1>
             <?php
             try {
-                DBSpletna::updateRacunStatus($_POST["id"]);
-                echo "Artikel uspešno posodobljen. <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
+                DBSpletna::updateImeArtikla($_POST["id"], $_POST["ime_artikla"]);
+                echo "Ime artikla uspešno posodobljeno. <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
+            } catch (Exception $e) {
+                echo "<p>Napaka pri potrjevanju: {$e->getMessage()}.</p>";
+            }
+        // edit artikel OPIS - DONE!!!
+        elseif (isset($_POST["do"]) && $_POST["do"] == "edit_artikel_opis"):
+            ?>
+            <h1>Obvestilo!</h1>
+            <?php
+            try {
+                DBSpletna::updateOpisArtikla($_POST["id"], $_POST["opis_artikla"]);
+                echo "Opis artikla uspešno posodobljen. <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
+            } catch (Exception $e) {
+                echo "<p>Napaka pri potrjevanju: {$e->getMessage()}.</p>";
+            }
+        // edit artikel CENA - DONE!!!
+        elseif (isset($_POST["do"]) && $_POST["do"] == "edit_artikel_cena"):
+            ?>
+            <h1>Obvestilo!</h1>
+            <?php
+            try {
+                DBSpletna::updateCenaArtikla($_POST["id"], $_POST["cena_artikla"]);
+                echo "Cena artikla uspešno posodobljena. <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
             } catch (Exception $e) {
                 echo "<p>Napaka pri potrjevanju: {$e->getMessage()}.</p>";
             }
             
-        // dodaj stranko - TODO!!!
+        // dodaj stranko - DONE!!!
         elseif (isset($_POST["do"]) && $_POST["do"] == "add_stranka"):
             ?>
             <h1>Dodajanje stranke</h1>
             <?php
             try {
-                DBSpletna::insertProdajalec($_POST["ime_prodajalca"], $_POST["priimek_prodajalca"], $_POST["email_prodajalca"], password_hash($_POST["geslo_prodajalca"], PASSWORD_DEFAULT));              
+                DBSpletna::insertStranka($_POST["ime_stranke"], $_POST["priimek_stranke"], $_POST["email_stranke"], password_hash($_POST["geslo_stranke"], PASSWORD_DEFAULT), $_POST["telefon_stranke"], $_POST["naslov_stranke"]);              
                 echo "Stranka uspešno dodana! <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
             } catch (Exception $e) {
                 echo "<p>Napaka pri dodajanju stranke: {$e->getMessage()}.</p>";
             }
-        // posodabljanje zapisa IMENA stranke - TODO!!!
+        // posodabljanje zapisa IMENA stranke - DONE!!!
         elseif (isset($_POST["do"]) && $_POST["do"] == "edit_ime"):
             ?>
             <h1>Posodobitev zapisa</h1>
             <?php
             try {
-                // var_dump($_POST);
-                // var_dump($_SESSION["ime_prodajalca"]);
-                // die();
-                DBSpletna::updateFirstName($_POST["id"], $_POST["ime_prodajalca"]);
+                DBSpletna::updateFirstName($_POST["id"], $_POST["ime_stranke"]);
                 echo "Ime uspešno posodobljeno. <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
             } catch (Exception $e) {
                 echo "<p>Napaka pri zapisu: {$e->getMessage()}.</p>";
             }
-        // posodabljanje zapisa PRIIMKA stranke - TODO!!!
+        // posodabljanje zapisa PRIIMKA stranke - DONE!!!
         elseif (isset($_POST["do"]) && $_POST["do"] == "edit_priimek"):
             ?>
             <h1>Posodobitev zapisa</h1>
             <?php
             try {
-                // var_dump($_POST);
-                // var_dump($_SESSION["ime_prodajalca"]);
-                // die();
-                DBSpletna::updateLastName($_POST["id"], $_POST["priimek_prodajalca"]);
+                DBSpletna::updateLastName($_POST["id"], $_POST["priimek_stranke"]);
                 echo "Priimek uspešno posodobljen. <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
             } catch (Exception $e) {
                 echo "<p>Napaka pri zapisu: {$e->getMessage()}.</p>";
             }
-        // posodabljanje zapisa EMAILA stranke - TODO!!!
+        // posodabljanje zapisa EMAILA stranke - DONE!!!
         elseif (isset($_POST["do"]) && $_POST["do"] == "edit_email"):
             ?>
             <h1>Posodobitev zapisa</h1>
             <?php
             try {
-                // var_dump($_POST);
-                // var_dump($_SESSION["ime_prodajalca"]);
-                // die();
-                DBSpletna::updateEmail($_POST["id"], $_POST["email_prodajalca"]);
+                DBSpletna::updateEmail($_POST["id"], $_POST["email_stranke"]);
                 echo "Email uspešno posodobljen. <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
             } catch (Exception $e) {
                 echo "<p>Napaka pri zapisu: {$e->getMessage()}.</p>";
             }
-        // posodabljanje zapisa GESLA stranke - TODO!!!
+        // posodabljanje zapisa GESLA stranke - DONE!!!
         elseif (isset($_POST["do"]) && $_POST["do"] == "edit_geslo"):
             ?>
             <h1>Posodobitev zapisa</h1>
             <?php
             try {
-                // var_dump($_POST);
-                // var_dump($_SESSION["ime_prodajalca"]);
-                // die();
                 // password_hash("stranka", PASSWORD_DEFAULT)
-                DBSpletna::updatePassword($_POST["id"], password_hash($_POST["geslo_prodajalca"], PASSWORD_DEFAULT));
+                DBSpletna::updatePassword($_POST["id"], password_hash($_POST["geslo_stranke"], PASSWORD_DEFAULT));
                 echo "Geslo uspešno posodobljeno. <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
             } catch (Exception $e) {
                 echo "<p>Napaka pri zapisu: {$e->getMessage()}.</p>";
             }
-        // posodabljanje zapisa TELEFONA stranke - TODO!!!
-        elseif (isset($_POST["do"]) && $_POST["do"] == "edit_geslo"):
+        // posodabljanje zapisa TELEFONA stranke - DONE!!!
+        elseif (isset($_POST["do"]) && $_POST["do"] == "edit_telefon"):
             ?>
             <h1>Posodobitev zapisa</h1>
             <?php
             try {
-                // var_dump($_POST);
-                // var_dump($_SESSION["ime_prodajalca"]);
-                // die();
-                // password_hash("stranka", PASSWORD_DEFAULT)
-                DBSpletna::updatePassword($_POST["id"], password_hash($_POST["geslo_prodajalca"], PASSWORD_DEFAULT));
-                echo "Geslo uspešno posodobljeno. <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
+                DBSpletna::updatePhone($_POST["id"], $_POST["telefon_stranke"]);
+                echo "Telefon uspešno posodobljeno. <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
             } catch (Exception $e) {
                 echo "<p>Napaka pri zapisu: {$e->getMessage()}.</p>";
             }
-        // posodabljanje zapisa NASLOVA stranke - TODO!!!
-        elseif (isset($_POST["do"]) && $_POST["do"] == "edit_geslo"):
+        // posodabljanje zapisa NASLOVA stranke - DONE!!!
+        elseif (isset($_POST["do"]) && $_POST["do"] == "edit_naslov"):
             ?>
             <h1>Posodobitev zapisa</h1>
             <?php
             try {
-                // var_dump($_POST);
-                // var_dump($_SESSION["ime_prodajalca"]);
-                // die();
-                // password_hash("stranka", PASSWORD_DEFAULT)
-                DBSpletna::updatePassword($_POST["id"], password_hash($_POST["geslo_prodajalca"], PASSWORD_DEFAULT));
-                echo "Geslo uspešno posodobljeno. <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
+                DBSpletna::updateAddress($_POST["id"], $_POST["naslov_stranke"]);
+                echo "Naslov uspešno posodobljeno. <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
             } catch (Exception $e) {
                 echo "<p>Napaka pri zapisu: {$e->getMessage()}.</p>";
             }
 
+        // BRISANJE ZAPISA IZ PB: brisanje stranke - DONE!!!
+        elseif (isset($_POST["do"]) && $_POST["do"] == "delete_stranka"):
+            ?>
+            <h1>Brisanje stranke</h1>
+            <?php
+            try {
+                DBSpletna::deleteUser($_POST["id"]);
+                $id_str = $_POST["id"];
+                echo "Stranka $id_str uspešno odstranjen. <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
+            } catch (Exception $e) {
+                echo "<p>Napaka pri brisanju: {$e->getMessage()}.</p>";
+            }
+        
         // edit narocilo - DONE!!!
         elseif (isset($_POST["do"]) && $_POST["do"] == "edit_narocilo"):
             ?>

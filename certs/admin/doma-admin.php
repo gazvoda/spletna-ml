@@ -171,7 +171,7 @@ require_once '../../db/database_spletna.php';
             <h1>Brisanje prodajalca</h1>
             <?php
             try {
-                DBSpletna::deleteProdajalec($_POST["id"]);
+                DBSpletna::deleteUser($_POST["id"]);
                 $id_prod = $_POST["id"];
                 echo "Prodajalec $id_prod uspešno odstranjen. <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
             } catch (Exception $e) {
