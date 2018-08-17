@@ -34,7 +34,7 @@ if ($isPost) {
 
             // pravilnost gesla preverimo s klicem funkcije 
             // password_verify(geslo, geslo_v_bazi)
-            if (password_verify($sent["geslo"], $uporabnik["geslo"])) {
+            if (password_verify($sent["geslo"], $uporabnik["geslo"]) && $uporabnik["status"] == "aktiven") {
                 $allowAccess = TRUE;
             }
         } catch (PDOException $e) {
