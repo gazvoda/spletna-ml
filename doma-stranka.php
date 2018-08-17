@@ -19,7 +19,7 @@ $url = filter_input(INPUT_SERVER, "PHP_SELF", FILTER_SANITIZE_SPECIAL_CHARS);
 $validationRules = ['do' => [
         'filter' => FILTER_VALIDATE_REGEXP,
         'options' => [
-            "regexp" => "/^(add_into_cart|update_cart|purge_cart|submit_order)$/"
+            "regexp" => "/^(add_into_cart|update_cart|purge_cart)$/"
         ]
     ],
     'id' => [
@@ -60,13 +60,6 @@ switch ($data["do"]) {
         break;
     case "purge_cart":
         unset($_SESSION["cart"]);
-        break;
-    case "submit_order":
-        if (isset($_SESSION["cart"])) {
-            
-            $neobdelano = "neobdelano";
-            DBSpletna::insertOrder($_SESSION["znesek"], $neobdelano, $_SESSION["uporabnik_id"]);
-        }
         break;
     default:
         break;
@@ -132,8 +125,7 @@ switch ($data["do"]) {
                     <input type="hidden" name="do" value="purge_cart" />
                     <input type="submit" value="Izprazni košarico" />
                 </form>
-                <form action="<?= $url ?>" method="POST">
-                    <input type="hidden" name="do" value="submit_order" />
+                <form action="stranka-racun.php" method="POST">
                     <input type="submit" value="Zaključi nakup" />
                 </form>
             <?php else: ?>
