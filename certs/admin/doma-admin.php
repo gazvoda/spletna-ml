@@ -153,26 +153,27 @@ require_once '../../db/database_spletna.php';
                 echo "<p>Napaka pri zapisu: {$e->getMessage()}.</p>";
             }
             
-        // VNOS ZAPISA V PB
+        // VNOS ZAPISA V PB: dodajanje prodajalca
         elseif (isset($_POST["do"]) && $_POST["do"] == "add"):
             ?>
             <h1>Vnašanje zapisa</h1>
             <?php
             try {
-                DBJokes::insert($_POST["joke_date"], $_POST["joke_text"]);
-                echo "Šala uspešno dodana. <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
+                DBSpletna::insertProdajalec($_POST["ime_prodajalca"], $_POST["priimek_prodajalca"], $_POST["email_prodajalca"], password_hash($_POST["geslo_prodajalca"], PASSWORD_DEFAULT));              
+                echo "Prodajalec uspešno dodan! <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
             } catch (Exception $e) {
-                echo "<p>Napaka pri zapisu: {$e->getMessage()}.</p>";
+                echo "<p>Napaka pri dodajanju prodajalca: {$e->getMessage()}.</p>";
             }
 
-        // BRISANJE ZAPISA IZ PB
+        // BRISANJE ZAPISA IZ PB: brisanje prodajalca
         elseif (isset($_POST["do"]) && $_POST["do"] == "delete"):
             ?>
-            <h1>Brisanje zapisa</h1>
+            <h1>Brisanje prodajalca</h1>
             <?php
             try {
-                DBJokes::delete($_POST["id"]);
-                echo "Šala uspešno odstranjena. <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
+                DBSpletna::deleteProdajalec($_POST["id"]);
+                $id_prod = $_POST["id"];
+                echo "Prodajalec $id_prod uspešno odstranjen. <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
             } catch (Exception $e) {
                 echo "<p>Napaka pri brisanju: {$e->getMessage()}.</p>";
             }
@@ -184,9 +185,7 @@ require_once '../../db/database_spletna.php';
             <?php
             try {
                 $vsi_prodajalci = DBSpletna::getAllRole("prodajalec");
-                var_dump($vsi_prodajalci);
                 $orders = DBSpletna::getAllOrders();
-                var_dump($orders);
             } catch (Exception $e) {
                 echo "Prišlo je do napake: {$e->getMessage()}";
             }

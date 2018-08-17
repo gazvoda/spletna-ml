@@ -77,15 +77,15 @@ class DBSpletna {
         return $statement->fetchAll();
     }
     
-/*
-    public static function delete($user_id) {
+
+    public static function deleteProdajalec($id) {
         $db = DBInit::getInstance();
 
-        $statement = $db->prepare("DELETE FROM user WHERE user_id = :user_id");
-        $statement->bindParam(":user_id", $user_id, PDO::PARAM_INT);
+        $statement = $db->prepare("DELETE FROM uporabnik WHERE id = :user_id");
+        $statement->bindParam(":user_id", $id, PDO::PARAM_INT);
         $statement->execute();
     }
-
+/*
     public static function get($user_id) {
         $db = DBInit::getInstance();
 
@@ -96,24 +96,24 @@ class DBSpletna {
 
         return $statement->fetch();
     }
-
-    public static function insert($role, $first_name, $last_name, $email, $password, $phone, $address, $status) {
+    */
+    public static function insertProdajalec($ime, $priimek, $email, $password) {
         $db = DBInit::getInstance();
+        $vloga = "prodajalec";
+        $status = "aktiven";        
 
-        $statement = $db->prepare("INSERT INTO user (role, first_name, last_name, email, password, phone, address, status)
-            VALUES (:role, :first_name, :last_name, :email, :password, :phone, :address, :status)");
-        $statement->bindParam(":role", $role);
-        $statement->bindParam(":first_name", $first_name);
-        $statement->bindParam(":last_name", $last_name);
+        $statement = $db->prepare("INSERT INTO uporabnik (vloga, ime, priimek, email, geslo, status)
+            VALUES (:vloga, :first_name, :last_name, :email, :password, :status)");
+        $statement->bindParam(":vloga", $vloga);
+        $statement->bindParam(":first_name", $ime);
+        $statement->bindParam(":last_name", $priimek);
         $statement->bindParam(":email", $email);
         $statement->bindParam(":password", $password);
-        $statement->bindParam(":phone", $phone);
-        $statement->bindParam(":address", $address);
         $statement->bindParam(":status", $status);
         
         $statement->execute();
     }
-*/
+
     public static function updatePassword($id, $geslo) {
         $db = DBInit::getInstance();
 
