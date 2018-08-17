@@ -58,6 +58,8 @@ require_once '../../db/database_spletna.php';
             $ime = $prodajalec["ime"];
             $priimek = $prodajalec["priimek"];
             $email = $prodajalec["email"];
+            $status = $prodajalec["status"];
+            
             ?>
             <h2>Urejanje zapisa id = <?= $id ?></h2>
             <form action="<?= $_SERVER["PHP_SELF"] ?>" method="post">
@@ -88,8 +90,23 @@ require_once '../../db/database_spletna.php';
             <h2>Izbris prodajalca</h2>
             <form action="<?= $_SERVER["PHP_SELF"] ?>" method="post">
                 <input type="hidden" name="id" value="<?= $id ?>" />
-                <input type="hidden" name="do" value="delete" />
-                <input type="submit" value="Briši" />
+                <!--- depending on user account status, change between "aktiviraj" in "deaktiviraj" --->
+                <?php
+                    switch ($status) {
+                    case "aktiven":
+                        $gumb_value = "Deaktiviraj";
+                        $gumb_action = "deaktiviraj_prodajalca";
+                        break;
+                    case "neaktiven":
+                        $gumb_value = "Aktiviraj";
+                        $gumb_action = "aktiviraj_prodajalca";
+                        break;
+                    default:
+                        break;
+                    }
+                ?>
+                <input type="hidden" name="do" value="<?= $gumb_action ?>" />
+                <input type="submit" value="<?= $gumb_value ?>" />
             </form>		
             <?php
         // posodabljanje zapisa IMENA prodajalca v pb
@@ -165,19 +182,33 @@ require_once '../../db/database_spletna.php';
                 echo "<p>Napaka pri dodajanju prodajalca: {$e->getMessage()}.</p>";
             }
 
-        // BRISANJE ZAPISA IZ PB: brisanje prodajalca
-        elseif (isset($_POST["do"]) && $_POST["do"] == "delete"):
+        // deaktiviranje prodajalca - TODO!!!
+        elseif (isset($_POST["do"]) && $_POST["do"] == "deaktiviraj_prodajalca"):
             ?>
-            <h1>Brisanje prodajalca</h1>
+            <h1>Deaktiviranje uporabniškega računa prodajalca</h1>
             <?php
             try {
-                DBSpletna::deleteUser($_POST["id"]);
-                $id_prod = $_POST["id"];
-                echo "Prodajalec $id_prod uspešno odstranjen. <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
+                DBSpletna::updateUserStatus($_POST["id"], "neaktiven");
+                $id_str = $_POST["id"];
+                echo "Prodajalec $id_str uspešno deaktiviran. <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
             } catch (Exception $e) {
-                echo "<p>Napaka pri brisanju: {$e->getMessage()}.</p>";
+                echo "<p>Napaka pri deaktiviranju: {$e->getMessage()}.</p>";
             }
-        // PRIKAZ VSEH ZAPISOV
+            
+        // aktiviranje prodajalca - TODO!!!
+        elseif (isset($_POST["do"]) && $_POST["do"] == "aktiviraj_prodajalca"):
+            ?>
+            <h1>Aktiviranje uporabniškega računa prodajalca</h1>
+            <?php
+            try {
+                DBSpletna::updateUserStatus($_POST["id"], "aktiven");
+                $id_str = $_POST["id"];
+                echo "Prodajalec $id_str uspešno aktiviran. <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
+            } catch (Exception $e) {
+                echo "<p>Napaka pri aktiviranju: {$e->getMessage()}.</p>";
+            }
+        
+// PRIKAZ VSEH ZAPISOV
         else:
             ?>
             <h1>Prodajalci</h1>
