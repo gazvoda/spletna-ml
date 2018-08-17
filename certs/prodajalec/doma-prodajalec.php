@@ -9,9 +9,6 @@ require_once '../../db/database_spletna.php';
     </head>
     <body>
         
-        <form action="nastavitve.php" method="get">
-            <input type="submit" value="Nastavitve">
-        </form>
         <form action="../../odjava.php" method="get">
             <input type="submit" value="Odjava">
         </form>
@@ -111,7 +108,7 @@ require_once '../../db/database_spletna.php';
             <?php
         
         // stranka - DONE!!!
-        elseif (isset($_GET["do"]) && $_GET["do"] == "edit_stranka"):
+        elseif (isset($_GET["do"]) && $_GET["do"] == "edit"):
             ?>
             <h1>Urejanje</h1>
             <?php
@@ -155,40 +152,43 @@ require_once '../../db/database_spletna.php';
                 <input type="password" name="geslo_stranke" placeholder="Geslo" />
                 <input type="submit" value="Spremeni" />
             </form>
-            <form action="<?= $_SERVER["PHP_SELF"] ?>" method="post">
-                <input type="hidden" name="id" value="<?= $id ?>" />
-                <input type="hidden" name="do" value="edit_telefon" />
-                <input type="text" name="telefon_stranke" value="<?= $telefon ?>" />
-                <input type="submit" value="Spremeni" />
-            </form>
-            <form action="<?= $_SERVER["PHP_SELF"] ?>" method="post">
-                <input type="hidden" name="id" value="<?= $id ?>" />
-                <input type="hidden" name="do" value="edit_naslov" />
-                <textarea rows="5" cols="20" name="naslov_stranke"><?= $naslov ?></textarea>
-                <input type="submit" value="Spremeni" />
-            </form>
-
-            <h2>Izbris prodajalca</h2>
-            <form action="<?= $_SERVER["PHP_SELF"] ?>" method="post">
-                <input type="hidden" name="id" value="<?= $id ?>" />
-                <!--- depending on user account status, change between "aktiviraj" in "deaktiviraj" --->
-                <?php
-                    switch ($status) {
-                    case "aktiven":
-                        $gumb_value = "Deaktiviraj";
-                        $gumb_action = "deaktiviraj_stranko";
-                        break;
-                    case "neaktiven":
-                        $gumb_value = "Aktiviraj";
-                        $gumb_action = "aktiviraj_stranko";
-                        break;
-                    default:
-                        break;
-                    }
-                ?>
-                <input type="hidden" name="do" value="<?= $gumb_action ?>" />
-                <input type="submit" value="<?= $gumb_value ?>" />
-            </form>		
+            <?php 
+                if (isset($_SESSION["uporabnik_id"]) && $_SESSION["uporabnik_id"] != $id) { ?>
+                    <form action="<?= $_SERVER["PHP_SELF"] ?>" method="post">
+                        <input type="hidden" name="id" value="<?= $id ?>" />
+                        <input type="hidden" name="do" value="edit_telefon" />
+                        <input type="text" name="telefon_stranke" value="<?= $telefon ?>" />
+                        <input type="submit" value="Spremeni" />
+                    </form>
+                    <form action="<?= $_SERVER["PHP_SELF"] ?>" method="post">
+                        <input type="hidden" name="id" value="<?= $id ?>" />
+                        <input type="hidden" name="do" value="edit_naslov" />
+                        <textarea rows="5" cols="20" name="naslov_stranke"><?= $naslov ?></textarea>
+                    <input type="submit" value="Spremeni" />
+                    </form>
+                    <h2>Izbris prodajalca</h2>
+                    <form action="<?= $_SERVER["PHP_SELF"] ?>" method="post">
+                        <input type="hidden" name="id" value="<?= $id ?>" />
+                        <!--- depending on user account status, change between "aktiviraj" in "deaktiviraj" --->
+                        <?php
+                            switch ($status) {
+                            case "aktiven":
+                                $gumb_value = "Deaktiviraj";
+                                $gumb_action = "deaktiviraj_stranko";
+                                break;
+                            case "neaktiven":
+                                $gumb_value = "Aktiviraj";
+                                $gumb_action = "aktiviraj_stranko";
+                                break;
+                            default:
+                                break;
+                            }
+                        ?>
+                        <input type="hidden" name="do" value="<?= $gumb_action ?>" />
+                        <input type="submit" value="<?= $gumb_value ?>" />
+                    </form>
+                <?php }
+            ?>		
             <?php    
         
             
@@ -392,6 +392,11 @@ require_once '../../db/database_spletna.php';
         // PRIKAZ VSEH ZAPISOV
         else:
             ?>
+            <form action="<?= htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="GET">
+                <input type="hidden" name="do" value="edit" />
+                <input type="hidden" name="id" value="<?= $_SESSION["uporabnik_id"] ?>" />
+                <button type="submit">Uredi svoj profil</button>
+            </form>
             <!--- NAROCILA --->
             <h2>NAROČILA</h2>
             <?php
@@ -456,7 +461,7 @@ require_once '../../db/database_spletna.php';
                 echo "Prišlo je do napake: {$e->getMessage()}";
             }
             foreach ($stranke as $num => $row) {
-                $url = $_SERVER["PHP_SELF"] . "?do=edit_stranka&id=" . $row["id"];
+                $url = $_SERVER["PHP_SELF"] . "?do=edit&id=" . $row["id"];
                 $id_stranke = $row["id"];
                 $ime_stranke = $row["ime"];
                 $priimek_stranke = $row["priimek"];

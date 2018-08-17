@@ -21,9 +21,6 @@ require_once '../../db/database_spletna.php';
         <title>Domaca stran</title>
     </head>
     <body>
-        <form action="nastavitve.php" method="get">
-            <input type="submit" value="Nastavitve">
-        </form>
         <form action="../../odjava.php" method="get">
             <input type="submit" value="Odjava">
         </form>
@@ -65,49 +62,55 @@ require_once '../../db/database_spletna.php';
             <form action="<?= $_SERVER["PHP_SELF"] ?>" method="post">
                 <input type="hidden" name="id" value="<?= $id ?>" />
                 <input type="hidden" name="do" value="edit_ime" />
-                <input type="text" name="ime_prodajalca" placeholder="Ime" />
+                <input type="text" name="ime_prodajalca" value="<?= $ime ?>" />
                 <input type="submit" value="Spremeni" />
             </form>
             <form action="<?= $_SERVER["PHP_SELF"] ?>" method="post">
                 <input type="hidden" name="id" value="<?= $id ?>" />
                 <input type="hidden" name="do" value="edit_priimek" />
-                <input type="text" name="priimek_prodajalca" placeholder="Priimek" />
+                <input type="text" name="priimek_prodajalca" value="<?= $priimek ?>" />
                 <input type="submit" value="Spremeni" />
             </form>
             <form action="<?= $_SERVER["PHP_SELF"] ?>" method="post">
                 <input type="hidden" name="id" value="<?= $id ?>" />
                 <input type="hidden" name="do" value="edit_email" />
-                <input type="text" name="email_prodajalca" placeholder="Email" />
+                <input type="text" name="email_prodajalca" value="<?= $email ?>" />
                 <input type="submit" value="Spremeni" />
             </form>
             <form action="<?= $_SERVER["PHP_SELF"] ?>" method="post">
                 <input type="hidden" name="id" value="<?= $id ?>" />
                 <input type="hidden" name="do" value="edit_geslo" />
-                <input type="password" name="geslo_prodajalca" placeholder="Geslo" />
+                <input type="password" name="geslo_prodajalca" placeholder="Novo geslo" />
                 <input type="submit" value="Spremeni" />
             </form>
-
-            <h2>Izbris prodajalca</h2>
-            <form action="<?= $_SERVER["PHP_SELF"] ?>" method="post">
-                <input type="hidden" name="id" value="<?= $id ?>" />
-                <!--- depending on user account status, change between "aktiviraj" in "deaktiviraj" --->
-                <?php
-                    switch ($status) {
-                    case "aktiven":
-                        $gumb_value = "Deaktiviraj";
-                        $gumb_action = "deaktiviraj_prodajalca";
-                        break;
-                    case "neaktiven":
-                        $gumb_value = "Aktiviraj";
-                        $gumb_action = "aktiviraj_prodajalca";
-                        break;
-                    default:
-                        break;
-                    }
-                ?>
-                <input type="hidden" name="do" value="<?= $gumb_action ?>" />
-                <input type="submit" value="<?= $gumb_value ?>" />
-            </form>		
+            
+            <?php 
+                if ($_SESSION["uporabnik_id"] != $id) {
+                    ?>
+                    <h2>Izbris prodajalca</h2>
+                    <form action="<?= $_SERVER["PHP_SELF"] ?>" method="post">
+                        <input type="hidden" name="id" value="<?= $id ?>" />
+                        <!--- depending on user account status, change between "aktiviraj" in "deaktiviraj" --->
+                        <?php
+                            switch ($status) {
+                            case "aktiven":
+                                $gumb_value = "Deaktiviraj";
+                                $gumb_action = "deaktiviraj_prodajalca";
+                                break;
+                            case "neaktiven":
+                                $gumb_value = "Aktiviraj";
+                                $gumb_action = "aktiviraj_prodajalca";
+                                break;
+                            default:
+                                break;
+                            }
+                        ?>
+                        <input type="hidden" name="do" value="<?= $gumb_action ?>" />
+                        <input type="submit" value="<?= $gumb_value ?>" />
+                    </form>
+                <?php }
+            ?>
+            	
             <?php
         // posodabljanje zapisa IMENA prodajalca v pb
         elseif (isset($_POST["do"]) && $_POST["do"] == "edit_ime"):
@@ -211,6 +214,11 @@ require_once '../../db/database_spletna.php';
 // PRIKAZ VSEH ZAPISOV
         else:
             ?>
+            <form action="<?= htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="GET">
+                <input type="hidden" name="do" value="edit" />
+                <input type="hidden" name="id" value="<?= $_SESSION["uporabnik_id"] ?>" />
+                <button type="submit">Uredi svoj profil</button>
+            </form>
             <h1>Prodajalci</h1>
             <h2><a href="<?= htmlspecialchars($_SERVER["PHP_SELF"]) . "?do=add" ?>">Dodaj prodajalca</a></h2>
             <?php
