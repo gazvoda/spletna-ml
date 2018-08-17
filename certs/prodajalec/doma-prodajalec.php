@@ -302,7 +302,7 @@ require_once '../../db/database_spletna.php';
                 echo "<p>Napaka pri zapisu: {$e->getMessage()}.</p>";
             }
 
-        // deaktiviranje stranke - TODO!!!
+        // deaktiviranje stranke - DONE!!!
         elseif (isset($_POST["do"]) && $_POST["do"] == "deaktiviraj_stranko"):
             ?>
             <h1>Deaktiviranje uporabniškega računa stranke</h1>
@@ -315,7 +315,7 @@ require_once '../../db/database_spletna.php';
                 echo "<p>Napaka pri deaktiviranju: {$e->getMessage()}.</p>";
             }
             
-        // aktiviranje stranke - TODO!!!
+        // aktiviranje stranke - DONE!!!
         elseif (isset($_POST["do"]) && $_POST["do"] == "aktiviraj_stranko"):
             ?>
             <h1>Aktiviranje uporabniškega računa stranke</h1>
