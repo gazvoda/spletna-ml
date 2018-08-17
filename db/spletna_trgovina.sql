@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.23, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.22, for Linux (x86_64)
 --
 -- Host: localhost    Database: spletna_trgovina
 -- ------------------------------------------------------
--- Server version	5.7.23-0ubuntu0.16.04.1
+-- Server version	5.7.22-0ubuntu0.16.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -28,8 +28,9 @@ CREATE TABLE `artikel` (
   `cena` float NOT NULL,
   `zaloga` int(11) DEFAULT NULL,
   `ime` text NOT NULL,
+  `status` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,7 +39,7 @@ CREATE TABLE `artikel` (
 
 LOCK TABLES `artikel` WRITE;
 /*!40000 ALTER TABLE `artikel` DISABLE KEYS */;
-INSERT INTO `artikel` VALUES (1,'Copati iz bombaza, rjavi',12,100,'Copati'),(2,'Usnjeni copati, rjavi',16,50,'Copati, usnjeni');
+INSERT INTO `artikel` VALUES (1,'Copati iz bombaza, rjavi',9,100,'Copati','aktiven'),(2,'Usnjeni copati, rjavi',16,50,'Copati','aktiven'),(3,'NMD XR1',120,100,'Adidas superge','aktiven'),(4,'Air Huarache',98,100,'Superge Nike','neaktiven'),(5,'NMD R2',111.99,100,'Adidas superge','aktiven');
 /*!40000 ALTER TABLE `artikel` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -55,7 +56,7 @@ CREATE TABLE `racun` (
   `status` text NOT NULL,
   `stranka_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -64,7 +65,7 @@ CREATE TABLE `racun` (
 
 LOCK TABLES `racun` WRITE;
 /*!40000 ALTER TABLE `racun` DISABLE KEYS */;
-INSERT INTO `racun` VALUES (1,16,'neobdelano',5),(2,56,'neobdelano',5),(3,128,'neobdelano',5);
+INSERT INTO `racun` VALUES (1,16,'zavrnjeno',5),(2,56,'odobreno',5),(3,128,'odobreno',5),(4,108,'odobreno',5),(5,44,'zavrnjeno',5),(6,160,'neobdelano',5),(7,288,'neobdelano',5);
 /*!40000 ALTER TABLE `racun` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -86,7 +87,7 @@ CREATE TABLE `uporabnik` (
   `naslov` text,
   `status` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -95,7 +96,7 @@ CREATE TABLE `uporabnik` (
 
 LOCK TABLES `uporabnik` WRITE;
 /*!40000 ALTER TABLE `uporabnik` DISABLE KEYS */;
-INSERT INTO `uporabnik` VALUES (1,'administrator','lenart','gazvoda','gazvoda@localhost.com','$2y$10$qUlo2cP8VwUrsOD3yLocoe87XbUgqnoJrC4u.iJooYRrLXsWxHcwS',NULL,NULL,'aktiven'),(2,'administrator','mihael','podplatnik','podplatnik@localhost.com','$2y$10$AkrFtpM0Fvp/sxOsD6s69uV67QF7e9FPPmLzAD4D1awgTbDTBwq6C',NULL,NULL,'aktiven'),(3,'prodajalec','joze','novak','novak@localhost.com','$2y$10$qPinrBoQAaq/.gY447lceuLW7Icbx05OlBtFw3d7ytz8J5oRGnlA2',NULL,NULL,'aktiven'),(4,'prodajalec','tanja','zupancic','zupancic@localhost.com','$2y$10$w3ds6KZiElD08u9ryUhU3ugK2946SL8ZcdMF1Zqp.9DSJbfNOgkSC',NULL,NULL,'neaktiven'),(5,'stranka','miha','pecnik','pecnik@localhost.com','$2y$10$z8mm21WvHLuxr9FW0jnQHe4iYsIZvr4N7qBNmZqqFdsLshgHxsoXO',51051051,'Naslov 1, 1000 Ljubljana, Slovenija','aktiven'),(6,'stranka','jan','hartman','hartman@localhost.com','$2y$10$gYfjopGSMcJWkjg/sh3CI.OnJLXwNkPqisx/u1yC.3cq3HkgoW6k2',31031031,'Naslov 2, 8000 Novo mesto, Slovenija','neaktiven');
+INSERT INTO `uporabnik` VALUES (1,'administrator','lenart','gazvoda','gazvoda@localhost.com','$2y$10$qUlo2cP8VwUrsOD3yLocoe87XbUgqnoJrC4u.iJooYRrLXsWxHcwS',NULL,NULL,'aktiven'),(2,'administrator','mihael','podplatnik','podplatnik@localhost.com','$2y$10$AkrFtpM0Fvp/sxOsD6s69uV67QF7e9FPPmLzAD4D1awgTbDTBwq6C',NULL,NULL,'aktiven'),(3,'prodajalec','joze','novak','novak1@localhost.com','$2y$10$irRO2JHcdmYYFxoac9Ya7eoIuVIgSXivdp3oBP2sFsdYvMnOEWcoK',NULL,NULL,'aktiven'),(4,'prodajalec','tanja','zupancic','zupancic@localhost.com','$2y$10$w3ds6KZiElD08u9ryUhU3ugK2946SL8ZcdMF1Zqp.9DSJbfNOgkSC',NULL,NULL,'aktiven'),(5,'stranka','Miha','pecnik','pecnik@localhost.com','$2y$10$z8mm21WvHLuxr9FW0jnQHe4iYsIZvr4N7qBNmZqqFdsLshgHxsoXO',51051051,'Naslov 1, 1000 Ljubljana, Slovenija','aktiven'),(6,'stranka','jan','hartman','hartman@localhost.com','$2y$10$gYfjopGSMcJWkjg/sh3CI.OnJLXwNkPqisx/u1yC.3cq3HkgoW6k2',31031031,'Naslov 2, 8000 Novo mesto, Slovenija','neaktiven'),(7,'stranka','Greta','Gasparac','gasparac@localhost.com','$2y$10$7JaBsQmLpsy1xiDHS.e/JuE72/WTZrXzXDO.seCpsMnhCPiVH6sTG',51051051,'Naslov 1, \r\n1000 Ljubljana,\r\nSlovenija','aktiven'),(8,'prodajalec','jernej','damjan','damjan@localhost.com','$2y$10$bndKZnT4ydX/LUG9hEJxHutmk3XVMo/fmk7dIsWciaAOFnr47DxTS',NULL,NULL,'aktiven');
 /*!40000 ALTER TABLE `uporabnik` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -108,4 +109,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-08-16 17:22:24
+-- Dump completed on 2018-08-17 17:42:15

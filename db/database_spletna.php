@@ -153,7 +153,7 @@ class DBSpletna {
     public static function getArticle($id) {
         $db = DBInit::getInstance();
         
-        $statement = $db->prepare("SELECT id, ime, opis, cena, zaloga FROM artikel WHERE id = :id");
+        $statement = $db->prepare("SELECT id, ime, opis, cena, zaloga, status FROM artikel WHERE id = :id");
         $statement->bindParam(":id", $id);
         $statement->execute();
         
@@ -187,6 +187,14 @@ class DBSpletna {
         $db = DBInit::getInstance();
         $statement = $db->prepare("UPDATE artikel SET cena = :cena WHERE id =:id");
         $statement->bindParam(":cena", $cena);
+        $statement->bindParam(":id", $id, PDO::PARAM_INT);
+        $statement->execute();
+    }
+    public static function updateArticleStatus($id, $status) {
+        $db = DBInit::getInstance();
+
+        $statement = $db->prepare("UPDATE artikel SET status = :status WHERE id =:id");
+        $statement->bindParam(":status", $status);
         $statement->bindParam(":id", $id, PDO::PARAM_INT);
         $statement->execute();
     }

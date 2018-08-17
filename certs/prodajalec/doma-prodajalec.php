@@ -64,6 +64,7 @@ require_once '../../db/database_spletna.php';
             $ime = $artikel["ime"]; 
             $opis = $artikel["opis"];
             $cena = $artikel["cena"];
+            $status = $artikel["status"];
             ?>
             <h2>Urejanje zapisa id = <?= $id ?></h2>
             <form action="<?= $_SERVER["PHP_SELF"] ?>" method="post">
@@ -86,11 +87,26 @@ require_once '../../db/database_spletna.php';
                 <input type="submit" value="Shrani" />
             </form>
 
-            <h2>Izbris zapisa</h2>
+            <h2>Izbris artikla</h2>
             <form action="<?= $_SERVER["PHP_SELF"] ?>" method="post">
                 <input type="hidden" name="id" value="<?= $id ?>" />
-                <input type="hidden" name="do" value="delete_artikel" />
-                <input type="submit" value="Briši" />
+                <!--- depending on article status, change between "aktiviraj" in "deaktiviraj" --->
+                <?php
+                    switch ($status) {
+                    case "aktiven":
+                        $gumb_value = "Deaktiviraj";
+                        $gumb_action = "deaktiviraj_artikel";
+                        break;
+                    case "neaktiven":
+                        $gumb_value = "Aktiviraj";
+                        $gumb_action = "aktiviraj_artikel";
+                        break;
+                    default:
+                        break;
+                    }
+                ?>
+                <input type="hidden" name="do" value="<?= $gumb_action ?>" />
+                <input type="submit" value="<?= $gumb_value ?>" />
             </form>		
             <?php
         
@@ -188,7 +204,6 @@ require_once '../../db/database_spletna.php';
             } catch (Exception $e) {
                 echo "<p>Napaka pri dodajanju artikla: {$e->getMessage()}.</p>";
             }
-
         // edit artikel IME - DONE!!!
         elseif (isset($_POST["do"]) && $_POST["do"] == "edit_artikel_ime"):
             ?>
@@ -221,6 +236,30 @@ require_once '../../db/database_spletna.php';
                 echo "Cena artikla uspešno posodobljena. <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
             } catch (Exception $e) {
                 echo "<p>Napaka pri potrjevanju: {$e->getMessage()}.</p>";
+            }
+        // deaktiviranje artikla - TODO!!!
+        elseif (isset($_POST["do"]) && $_POST["do"] == "deaktiviraj_artikel"):
+            ?>
+            <h1>Deaktiviranje artikla</h1>
+            <?php
+            try {
+                DBSpletna::updateArticleStatus($_POST["id"], "neaktiven");
+                $id_str = $_POST["id"];
+                echo "Artikel $id_str uspešno deaktiviran. <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
+            } catch (Exception $e) {
+                echo "<p>Napaka pri deaktiviranju: {$e->getMessage()}.</p>";
+            }
+        // aktiviranje artikla - TODO!!!
+        elseif (isset($_POST["do"]) && $_POST["do"] == "aktiviraj_artikel"):
+            ?>
+            <h1>Aktiviranje artikla</h1>
+            <?php
+            try {
+                DBSpletna::updateArticleStatus($_POST["id"], "aktiven");
+                $id_str = $_POST["id"];
+                echo "Artikel $id_str uspešno aktiviran. <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
+            } catch (Exception $e) {
+                echo "<p>Napaka pri aktiviranju: {$e->getMessage()}.</p>";
             }
             
         // dodaj stranko - DONE!!!
@@ -314,7 +353,6 @@ require_once '../../db/database_spletna.php';
             } catch (Exception $e) {
                 echo "<p>Napaka pri deaktiviranju: {$e->getMessage()}.</p>";
             }
-            
         // aktiviranje stranke - DONE!!!
         elseif (isset($_POST["do"]) && $_POST["do"] == "aktiviraj_stranko"):
             ?>
@@ -339,7 +377,6 @@ require_once '../../db/database_spletna.php';
             } catch (Exception $e) {
                 echo "<p>Napaka pri potrjevanju: {$e->getMessage()}.</p>";
             }
-        
         // zavrni narocilo - DONE!!!
         elseif (isset($_POST["do"]) && $_POST["do"] == "zavrni_narocilo"):
             ?>
