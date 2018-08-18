@@ -1,14 +1,4 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <link rel="stylesheet" type="text/css" href="css/style.css">
-        <meta charset="UTF-8" />
-        <title>Spletna trgovina - ML</title>
-    </head>
-    <body>
-
 <?php
-
 /* 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -20,6 +10,20 @@ require_once 'db/database_spletna.php';
 session_start();
 echo "Dobrodosli v Spletni trgovini - ML!";
 // var_dump($_SESSION);
+
+?>
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+        <meta charset="UTF-8" />
+        <title>Spletna trgovina - ML</title>
+    </head>
+    <body>
+
+<?php
+
 
 $artikli = DBSpletna::getAllArticles();
 //var_dump($artikli);
