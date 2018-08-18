@@ -1,13 +1,19 @@
-<!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
 <?php
 
 require_once 'db/database_spletna.php';
-        
+echo "Za nakupovanje je potrebna registracija ali prijava";
+?>
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Spletna trgovina - ML</title>
+    </head>
+    <body>
+
+<?php
 $allowAccess = FALSE;
 $isPost = filter_input(INPUT_SERVER, 'REQUEST_METHOD') == 'POST';
 
@@ -43,12 +49,7 @@ if ($isPost) {
     }
 }
 ?>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Spletna trgovina - ML</title>
-    </head>
-    <body>
+
         <?php
         if ($isPost) {
             if ($allowAccess) {
@@ -81,9 +82,14 @@ if ($isPost) {
                 echo "Prijava neuspešna.";
             }
         } else {
-            ?><form action="<?= basename(__FILE__) ?>" method="post">
-                Username <input type="text" name="email" />
-                Password <input type="password" name="geslo" />
+            ?>
+            <form action="registracija.php">
+                <input type="submit" value="Registracija">
+            </form>
+            <form action="<?= basename(__FILE__) ?>" method="post">
+                Prijava z obstoječim računom: <br />
+                Email <input type="text" name="email" />
+                Geslo <input type="password" name="geslo" />
                 <input type="submit" value="Prijava">
             </form>
             <?php
@@ -95,5 +101,14 @@ if ($isPost) {
             <?php
         }
         ?>
+        
+        <div id="main">
+            <?php foreach (DBSpletna::getAllArticles() as $artikel): ?>
+                <div class="book">
+                        <p><?= $artikel['ime'] ?>: <?= $artikel['opis'] ?></p>
+                        <p><?= number_format($artikel['cena'], 2) ?> EUR<br/>
+                </div>
+            <?php endforeach; ?>
+        </div>
     </body>
 </html>
