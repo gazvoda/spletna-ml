@@ -1,3 +1,12 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+        <meta charset="UTF-8" />
+        <title>Spletna trgovina - ML</title>
+    </head>
+    <body>
+
 <?php
 
 /* 
@@ -19,7 +28,7 @@ $url = filter_input(INPUT_SERVER, "PHP_SELF", FILTER_SANITIZE_SPECIAL_CHARS);
 $validationRules = ['do' => [
         'filter' => FILTER_VALIDATE_REGEXP,
         'options' => [
-            "regexp" => "/^(add_into_cart|update_cart|purge_cart)$/"
+            "regexp" => "/^(add_into_cart|update_cart|purge_cart|edit_profile|edit_ime|edit_priimek|edit_email|edit_geslo|edit_telefon|edit_naslov)$/"
         ]
     ],
     'id' => [
@@ -32,6 +41,11 @@ $validationRules = ['do' => [
     ]
 ];
 $data = filter_input_array(INPUT_POST, $validationRules);
+var_dump($data);
+
+$data_get = filter_input_array(INPUT_GET, $validationRules);
+var_dump($data_get);
+// var_dump($_SESSION);
 
 switch ($data["do"]) {
     case "add_into_cart":
@@ -61,19 +75,139 @@ switch ($data["do"]) {
     case "purge_cart":
         unset($_SESSION["cart"]);
         break;
+    case "edit_ime":
+        ?>
+            <h1>Posodobitev zapisa</h1>
+            <?php
+            try {
+                DBSpletna::updateFirstName($_SESSION["uporabnik_id"], $_POST["ime_stranke"]);
+                echo "Ime uspešno posodobljeno.</p>";
+            } catch (Exception $e) {
+                echo "<p>Napaka pri zapisu: {$e->getMessage()}.</p>";
+            }
+        break;
+    case "edit_priimek":
+        ?>
+            <h1>Posodobitev zapisa</h1>
+            <?php
+            try {
+                DBSpletna::updateLastName($_SESSION["uporabnik_id"], $_POST["priimek_stranke"]);
+                echo "Priimek uspešno posodobljen.</p>";
+            } catch (Exception $e) {
+                echo "<p>Napaka pri zapisu: {$e->getMessage()}.</p>";
+            }
+        break;
+    case "edit_email":
+        ?>
+            <h1>Posodobitev zapisa</h1>
+            <?php
+            try {
+                DBSpletna::updateEmail($_SESSION["uporabnik_id"], $_POST["email_stranke"]);
+                echo "Email uspešno posodobljen.</p>";
+            } catch (Exception $e) {
+                echo "<p>Napaka pri zapisu: {$e->getMessage()}.</p>";
+            }
+        break;
+    case "edit_geslo":
+        ?>
+            <h1>Posodobitev zapisa</h1>
+            <?php
+            try {
+                // password_hash("stranka", PASSWORD_DEFAULT)
+                DBSpletna::updatePassword($_SESSION["uporabnik_id"], password_hash($_POST["geslo_stranke"], PASSWORD_DEFAULT));
+                echo "Geslo uspešno posodobljeno. <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
+            } catch (Exception $e) {
+                echo "<p>Napaka pri zapisu: {$e->getMessage()}.</p>";
+            }
+        break;
+    case "edit_telefon":
+        ?>
+            <h1>Posodobitev zapisa</h1>
+            <?php
+            try {
+                DBSpletna::updatePhone($_SESSION["uporabnik_id"], $_POST["telefon_stranke"]);
+                echo "Telefon uspešno posodobljeno. <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
+            } catch (Exception $e) {
+                echo "<p>Napaka pri zapisu: {$e->getMessage()}.</p>";
+            }
+        break;
+    case "edit_naslov":
+        ?>
+            <h1>Posodobitev zapisa</h1>
+            <?php
+            try {
+                DBSpletna::updateAddress($_SESSION["uporabnik_id"], $_POST["naslov_stranke"]);
+                echo "Naslov uspešno posodobljen. <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
+            } catch (Exception $e) {
+                echo "<p>Napaka pri zapisu: {$e->getMessage()}.</p>";
+            }
+        break;
     default:
         break;
 }
-?><!DOCTYPE html>
-<html>
-    <head>
-        <link rel="stylesheet" type="text/css" href="css/style.css">
-        <meta charset="UTF-8" />
-        <title>Spletna trgovina - ML</title>
-    </head>
-    <body>
+
+if ($data_get["do"] == "edit_profile" && isset($_SESSION["uporabnik_id"])) {
+            ?>
+            <h1>Urejanje</h1>
+            <?php
+            try {
+                $stranka = DBSpletna::getUser($_SESSION["uporabnik_id"])[0]; // POIZVEDBA V PB
+                //var_dump($prodajalec);
+            } catch (Exception $e) {
+                echo "Napaka pri poizvedbi: " . $e->getMessage();
+            }
+
+            $id = $stranka["id"];
+            $ime = $stranka["ime"];
+            $priimek = $stranka["priimek"];
+            $email = $stranka["email"];
+            $telefon = $stranka["telefon"];
+            $naslov = $stranka["naslov"];
+            ?>
+            <h2>Urejanje zapisa id = <?= $id ?></h2>
+            <form action="<?= $url ?>" method="post">
+                <input type="hidden" name="do" value="edit_ime" />
+                <input type="text" name="ime_stranke" value="<?= $ime ?>" />
+                <input type="submit" value="Spremeni" />
+            </form>
+            <form action="<?= $url ?>" method="post">
+                <input type="hidden" name="do" value="edit_priimek" />
+                <input type="text" name="priimek_stranke" value="<?= $priimek ?>" />
+                <input type="submit" value="Spremeni" />
+            </form>
+            <form action="<?= $url ?>" method="post">
+                <input type="hidden" name="do" value="edit_email" />
+                <input type="text" name="email_stranke" value="<?= $email ?>" />
+                <input type="submit" value="Spremeni" />
+            </form>
+            <form action="<?= $url ?>" method="post">
+                <input type="hidden" name="do" value="edit_geslo" />
+                <input type="password" name="geslo_stranke" placeholder="Geslo" />
+                <input type="submit" value="Spremeni" />
+            </form>
+            <form action="<?= $url ?>" method="post">
+                <input type="hidden" name="do" value="edit_telefon" />
+                <input type="text" name="telefon_stranke" value="<?= $telefon ?>" />
+                <input type="submit" value="Spremeni" />
+            </form>
+            <form action="<?= $url ?>" method="post">
+                <input type="hidden" name="do" value="edit_naslov" />
+                <textarea rows="5" cols="20" name="naslov_stranke"><?= $naslov ?></textarea>
+            <input type="submit" value="Spremeni" />
+            </form>	
+            <?php
+} else {
+    ?>
 
         <h1>Spletna trgovina - ML</h1>
+        
+        <form action="../../odjava.php" method="get">
+            <input type="submit" value="Odjava">
+        </form>
+        <form action="<?= $url ?>" method="GET">
+            <input type="hidden" name="do" value="edit_profile" />
+            <button type="submit">Uredi svoj profil</button>
+        </form>
         
         <div id="main">
             <?php foreach (DBSpletna::getAllArticles() as $artikel): ?>
@@ -132,5 +266,8 @@ switch ($data["do"]) {
                 Košara je prazna.                
             <?php endif; ?>
         </div>
+        <?php
+}   
+?>   
     </body>
 </html>
