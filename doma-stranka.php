@@ -45,10 +45,10 @@ $validationRules = ['do' => [
     ]
 ];
 $data = filter_input_array(INPUT_POST, $validationRules);
-var_dump($data);
+// var_dump($data);
 
 $data_get = filter_input_array(INPUT_GET, $validationRules);
-var_dump($data_get);
+// var_dump($data_get);
 // var_dump($_SESSION);
 
 switch ($data["do"]) {
