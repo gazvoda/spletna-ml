@@ -398,35 +398,64 @@ require_once '../../db/database_spletna.php';
                 $racuni = DBSpletna::getAllOrders();
                 echo "<p><b>Vsi računi do dne </b>" . date("d/m/Y") . "! <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
                 //var_dump($racuni);
-                foreach ($racuni as $num => $row) {
-                    //$url = $_SERVER["PHP_SELF"] . "?do=edit&id=" . $row["id"];
+                foreach ($racuni as $num => $row) {                    
                     $id_racun = $row["id"];
                     $cena = $row["postavka"];
                     $status = $row["status"];
                     $id_stranka = $row["stranka_id"];
 
                     if ($status == "zavrnjeno"){
-                        echo "<p>Račun št. $id_racun za stranko: $id_stranka <br /> Cena " . number_format($cena, 2) . " EUR </br> Status: <font color='red'>$status</font>"; // <br />[<a href='$url'>Uredi</a>]</p>\n";
-                        
+                        echo "<p>Račun št. $id_racun za stranko: $id_stranka <br /> Cena " . number_format($cena, 2) . " EUR </br> Status: <font color='red'>$status</font>";                    
                     }
                     else if ($status == "odobreno"){
-                        echo "<p>Račun št. $id_racun za stranko: $id_stranka <br /> Cena " . number_format($cena, 2) . " EUR </br> Status: <font color='green'>$status</font>"; // <br />[<a href='$url'>Uredi</a>]</p>\n";
+                        $url = $_SERVER["PHP_SELF"] . "?do=storno&id=". $id_racun;
+                        echo "<p>Račun št. $id_racun za stranko: $id_stranka <br /> Cena " . number_format($cena, 2) . " EUR </br> Status: <font color='green'>$status</font> [<a href='$url'>Storniraj</a>]</p>\n"; // <br />[<a href='$url'>Uredi</a>]</p>\n";
+                    
+ 
+                    }
+                    else if ($status == "stornirano"){
+                        echo "<p>Račun št. $id_racun za stranko: $id_stranka <br /> Cena " . number_format($cena, 2) . " EUR </br> Status: <font color='brown'>$status</font>"; // <br />[<a href='$url'>Uredi</a>]</p>\n";
                     }
                     else{
-                        echo "<p>Račun št. $id_racun za stranko: $id_stranka <br /> Cena " . number_format($cena, 2) . " EUR </br> Status: <font color='blue'>$status</font>"; // <br />[<a href='$url'>Uredi</a>]</p>\n";
+                        echo "<p>Račun št. $id_racun za stranko: $id_stranka <br /> Cena " . number_format($cena, 2) . " EUR </br> Status: <font color='grey'>$status</font>"; // <br />[<a href='$url'>Uredi</a>]</p>\n";
                     }
                 }
             } catch (Exception $e) {
                 echo "<p>Napaka pri prikazu vseh računov!: {$e->getMessage()}.</p>";
             }      
+        elseif (isset($_GET["do"]) && $_GET["do"] == "storno"):
+            ?>
+            <h1>Storniranje računa</h1>
+            <?php 
+            $url = $_SERVER["PHP_SELF"] . "?do=show";
+            echo "Ali ste prepričani, da želite stornirati račun? <a href='$url'>Ne, vrni se nazaj.</a></p>";
             
+            ?>
+            <form action="<?= htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="POST">
+                <input type="hidden" name="do" value="storniraj" />
+                <input type="hidden" name="id" value="<?=$_GET["id"]?>" />
+                <button class="gumb"type="submit">Storniraj</button>
+            </form>
+            <?php
+        // Storniraj narcilo
+        elseif (isset($_POST["do"]) && $_POST["do"] == "storniraj"):
+            ?>
+            <h1>Račun je storniran!</h1>
+            <?php
+            try {
+                $id_racun = $_POST["id"];
+                DBSpletna::updateRacunStatus3($id_racun);
+                echo "Račun št. $id_racun uspešno storniran! <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
+            } catch (Exception $e) {
+                echo "<p>Napaka pri storniranju: {$e->getMessage()}.</p>";
+            }  
         // PRIKAZ VSEH ZAPISOV
         else:
             ?>
             <!--- Ogled zgodovine računov ---> 
             <form action="<?= htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="GET">
                 <input type="hidden" name="do" value="show" />
-                <button class="gumb"type="submit">Ogled vseh naročil</button>
+                <button type="submit">Ogled vseh naročil</button>
             </form>
             
             <!--- Urejanje profila ---> 
