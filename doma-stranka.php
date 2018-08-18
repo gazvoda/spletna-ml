@@ -212,6 +212,9 @@ if ($data_get["do"] == "edit_profile" && isset($_SESSION["uporabnik_id"])) {
             <input type="hidden" name="do" value="edit_profile" />
             <button type="submit">Uredi svoj profil</button>
         </form>
+        <form action="seznam-narocil.php" method="get">
+            <input type="submit" value="Seznam vseh naročil">
+        </form>
         
         <div id="main">
             <?php foreach (DBSpletna::getAllArticles() as $artikel): ?>

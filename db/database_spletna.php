@@ -209,6 +209,14 @@ class DBSpletna {
 
         return $statement->fetchAll();
     }
+    public static function getAllOrdersStranka($stranka_id) {
+        $db = DBInit::getInstance();
+        $statement = $db->prepare("SELECT id, postavka, status FROM racun WHERE stranka_id =:stranka_id");
+        $statement->bindParam(":stranka_id", $stranka_id);
+        $statement->execute();
+
+        return $statement->fetchAll();
+    }
     public static function insertOrder($postavka, $neobdelano, $stranka) {
         $db = DBInit::getInstance();
         
