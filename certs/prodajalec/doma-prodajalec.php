@@ -4,6 +4,7 @@ require_once '../../db/database_spletna.php';
 ?>
 <html>
     <head>
+        <link rel="stylesheet" type="text/css" href="../../css/style.css">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Domaca stran</title>
     </head>
@@ -388,10 +389,47 @@ require_once '../../db/database_spletna.php';
             } catch (Exception $e) {
                 echo "<p>Napaka pri zavrnitvi računa!: {$e->getMessage()}.</p>";
             }
+        // Ogled racunov
+        elseif (isset($_GET["do"]) && $_GET["do"] == "show"):
+            ?>
+            <h1>Zgodovina vseh računov!</h1>
+            <?php
+            try {
+                $racuni = DBSpletna::getAllOrders();
+                echo "<p><b>Vsi računi do dne </b>" . date("d/m/Y") . "! <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
+                //var_dump($racuni);
+                foreach ($racuni as $num => $row) {
+                    //$url = $_SERVER["PHP_SELF"] . "?do=edit&id=" . $row["id"];
+                    $id_racun = $row["id"];
+                    $cena = $row["postavka"];
+                    $status = $row["status"];
+                    $id_stranka = $row["stranka_id"];
+
+                    if ($status == "zavrnjeno"){
+                        echo "<p>Račun št. $id_racun za stranko: $id_stranka <br /> Cena " . number_format($cena, 2) . " EUR </br> Status: <font color='red'>$status</font>"; // <br />[<a href='$url'>Uredi</a>]</p>\n";
+                        
+                    }
+                    else if ($status == "odobreno"){
+                        echo "<p>Račun št. $id_racun za stranko: $id_stranka <br /> Cena " . number_format($cena, 2) . " EUR </br> Status: <font color='green'>$status</font>"; // <br />[<a href='$url'>Uredi</a>]</p>\n";
+                    }
+                    else{
+                        echo "<p>Račun št. $id_racun za stranko: $id_stranka <br /> Cena " . number_format($cena, 2) . " EUR </br> Status: <font color='blue'>$status</font>"; // <br />[<a href='$url'>Uredi</a>]</p>\n";
+                    }
+                }
+            } catch (Exception $e) {
+                echo "<p>Napaka pri prikazu vseh računov!: {$e->getMessage()}.</p>";
+            }      
             
         // PRIKAZ VSEH ZAPISOV
         else:
             ?>
+            <!--- Ogled zgodovine računov ---> 
+            <form action="<?= htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="GET">
+                <input type="hidden" name="do" value="show" />
+                <button class="gumb"type="submit">Ogled vseh naročil</button>
+            </form>
+            
+            <!--- Urejanje profila ---> 
             <form action="<?= htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="GET">
                 <input type="hidden" name="do" value="edit" />
                 <input type="hidden" name="id" value="<?= $_SESSION["uporabnik_id"] ?>" />
