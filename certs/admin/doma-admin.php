@@ -10,7 +10,10 @@
 //$geslo = $_POST["geslo"];
 session_start();
 //echo "Prijava uspesna za admina";
-//var_dump($_SESSION);
+if (!isset($_SESSION["uporabnik_id"])) {
+    echo "Za ogled te strani morate biti prijavljeni!";
+} elseif ($_SESSION["uporabnik_vloga"] == "administrator") {
+
 require_once '../../db/database_spletna.php';
 
 ?>
@@ -282,3 +285,6 @@ require_once '../../db/database_spletna.php';
 </html>
 
 
+<?php
+
+}

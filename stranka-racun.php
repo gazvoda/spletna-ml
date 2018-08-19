@@ -3,6 +3,10 @@
 require_once 'db/database_spletna.php';
 
 session_start();
+if (!isset($_SESSION["uporabnik_id"])) {
+    echo "Za ogled te strani morate biti prijavljeni!";
+} elseif ($_SESSION["uporabnik_vloga"] == "stranka") {
+
 
 $validationRules = ['do' => [
         'filter' => FILTER_VALIDATE_REGEXP,
@@ -79,5 +83,4 @@ switch ($data["do"]) {
     <?php
         break;
 }
-?>
-
+}

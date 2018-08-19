@@ -6,6 +6,10 @@
     <body>
         <?php
         session_start();
+        if (!isset($_SESSION["uporabnik_id"]) && $_SESSION["uporabnik_vloga" != "stranka"]) {
+            echo "Za ogled te strani morate biti prijavljeni, ali pa nimate ustreznih pooblastil";
+        } else {
+
         $authorized_users = ["Ana"];
 
         $client_cert = filter_input(INPUT_SERVER, "SSL_CLIENT_CERT");
@@ -44,3 +48,5 @@
         ?>
     </body>
 </html>
+
+        <?php }

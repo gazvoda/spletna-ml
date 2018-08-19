@@ -1,5 +1,9 @@
 <?php
 session_start();
+if (!isset($_SESSION["uporabnik_id"])) {
+    echo "Za ogled te strani morate biti prijavljeni!";
+} elseif ($_SESSION["uporabnik_vloga"] == "prodajalec") {
+
 require_once '../../db/database_spletna.php';
 ?>
 <html>
@@ -595,3 +599,4 @@ require_once '../../db/database_spletna.php';
         ?>
     </body>
 </html>
+<?php }

@@ -8,6 +8,12 @@
 require_once 'db/database_spletna.php';
 
 session_start();
+if (!isset($_SESSION["uporabnik_id"])) {
+    echo "Za ogled te strani morate biti prijavljeni!";
+} elseif ($_SESSION["uporabnik_vloga"] == "stranka") {
+
+} {
+
 echo "Dobrodosli v Spletni trgovini - ML!";
 // var_dump($_SESSION);
 
@@ -298,3 +304,4 @@ if ($data_get["do"] == "edit_profile" && isset($_SESSION["uporabnik_id"])) {
 ?>   
     </body>
 </html>
+<?php }
