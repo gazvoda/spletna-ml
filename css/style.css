@@ -46,3 +46,14 @@
     background-color:#4095c6;
 }
 
+label {
+    width:70px;
+    clear:left;
+    text-align:right;
+    padding-right:10px;
+}
+
+input, label {
+    float:left;
+}
+
