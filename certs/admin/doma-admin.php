@@ -26,11 +26,48 @@ require_once '../../db/database_spletna.php';
         </form>
     
         <?php
+        
+        $url = filter_input(INPUT_SERVER, "PHP_SELF", FILTER_SANITIZE_SPECIAL_CHARS);
+        // var_dump($url);
+        $validationRules = ['do' => [
+                'filter' => FILTER_VALIDATE_REGEXP,
+                'options' => [
+                    "regexp" => "/^(add|edit|edit_ime|edit_priimek|edit_email|edit_geslo|add|deaktiviraj_prodajalca|aktiviraj_prodajalca)$/"
+                ]
+            ],
+            'id' => [
+                'filter' => FILTER_VALIDATE_INT,
+                'options' => ['min_range' => 0]
+            ],
+            'kolicina' => [
+                'filter' => FILTER_VALIDATE_INT,
+                'options' => ['min_range' => 0]
+            ],
+            'ime_prodajalca' => [
+                'filter' => FILTER_SANITIZE_STRING
+            ],
+            'priimek_prodajalca' => [
+                'filter' => FILTER_SANITIZE_STRING
+            ],
+            'email_prodajalca' => [
+                'filter' => FILTER_SANITIZE_EMAIL
+            ],
+            'geslo_prodajalca' => [
+                'filter' => FILTER_SANITIZE_STRING
+            ]
+        ];
+        $data = filter_input_array(INPUT_POST, $validationRules);
+        // var_dump($data);
+
+        $data_get = filter_input_array(INPUT_GET, $validationRules);
+        // var_dump($data_get);
+        // var_dump($_SESSION);
+        
         // VNOS PRODAJALCA -- ZASLONSKA MASKA
-        if (isset($_GET["do"]) && $_GET["do"] == "add"):
+        if (isset($data_get["do"]) && $data_get["do"] == "add"):
             ?>
             <h1>Dodaj prodajalca</h1>
-            <form action="<?= $_SERVER["PHP_SELF"] ?>" method="post">
+            <form action="<?= $url ?>" method="post">
                 <input type="hidden" name="do" value="add" />
                 <input type="text" name="ime_prodajalca" placeholder="Ime" /><br />
                 <input type="text" name="priimek_prodajalca" placeholder="Priimek" /><br />
@@ -40,12 +77,12 @@ require_once '../../db/database_spletna.php';
             </form>
             <?php
         // UREJANJE PRODAJALCA -- ZASLONSKA MASKA
-        elseif (isset($_GET["do"]) && $_GET["do"] == "edit"):
+        elseif (isset($data_get["do"]) && $data_get["do"] == "edit"):
             ?>
             <h1>Urejanje</h1>
             <?php
             try {
-                $prodajalec = DBSpletna::getUser($_GET["id"])[0]; // POIZVEDBA V PB
+                $prodajalec = DBSpletna::getUser($data_get["id"])[0]; // POIZVEDBA V PB
                 //var_dump($prodajalec);
             } catch (Exception $e) {
                 echo "Napaka pri poizvedbi: " . $e->getMessage();
@@ -59,25 +96,25 @@ require_once '../../db/database_spletna.php';
             
             ?>
             <h2>Urejanje zapisa id = <?= $id ?></h2>
-            <form action="<?= $_SERVER["PHP_SELF"] ?>" method="post">
+            <form action="<?= $url ?>" method="post">
                 <input type="hidden" name="id" value="<?= $id ?>" />
                 <input type="hidden" name="do" value="edit_ime" />
                 <input type="text" name="ime_prodajalca" value="<?= $ime ?>" />
                 <input type="submit" value="Spremeni" />
             </form>
-            <form action="<?= $_SERVER["PHP_SELF"] ?>" method="post">
+            <form action="<?= $url ?>" method="post">
                 <input type="hidden" name="id" value="<?= $id ?>" />
                 <input type="hidden" name="do" value="edit_priimek" />
                 <input type="text" name="priimek_prodajalca" value="<?= $priimek ?>" />
                 <input type="submit" value="Spremeni" />
             </form>
-            <form action="<?= $_SERVER["PHP_SELF"] ?>" method="post">
+            <form action="<?= $url ?>" method="post">
                 <input type="hidden" name="id" value="<?= $id ?>" />
                 <input type="hidden" name="do" value="edit_email" />
                 <input type="text" name="email_prodajalca" value="<?= $email ?>" />
                 <input type="submit" value="Spremeni" />
             </form>
-            <form action="<?= $_SERVER["PHP_SELF"] ?>" method="post">
+            <form action="<?= $url ?>" method="post">
                 <input type="hidden" name="id" value="<?= $id ?>" />
                 <input type="hidden" name="do" value="edit_geslo" />
                 <input type="password" name="geslo_prodajalca" placeholder="Novo geslo" />
@@ -88,7 +125,7 @@ require_once '../../db/database_spletna.php';
                 if ($_SESSION["uporabnik_id"] != $id) {
                     ?>
                     <h2>Izbris prodajalca</h2>
-                    <form action="<?= $_SERVER["PHP_SELF"] ?>" method="post">
+                    <form action="<?= $url ?>" method="post">
                         <input type="hidden" name="id" value="<?= $id ?>" />
                         <!--- depending on user account status, change between "aktiviraj" in "deaktiviraj" --->
                         <?php
@@ -113,7 +150,7 @@ require_once '../../db/database_spletna.php';
             	
             <?php
         // posodabljanje zapisa IMENA prodajalca v pb
-        elseif (isset($_POST["do"]) && $_POST["do"] == "edit_ime"):
+        elseif (isset($data["do"]) && $data["do"] == "edit_ime"):
             ?>
             <h1>Posodobitev zapisa</h1>
             <?php
@@ -121,14 +158,14 @@ require_once '../../db/database_spletna.php';
                 // var_dump($_POST);
                 // var_dump($_SESSION["ime_prodajalca"]);
                 // die();
-                DBSpletna::updateFirstName($_POST["id"], $_POST["ime_prodajalca"]);
-                echo "Ime uspešno posodobljeno. <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
+                DBSpletna::updateFirstName($data["id"], $data["ime_prodajalca"]);
+                echo "Ime uspešno posodobljeno. <a href='$url'>Na prvo stran.</a></p>";
             } catch (Exception $e) {
                 echo "<p>Napaka pri zapisu: {$e->getMessage()}.</p>";
             }
 
         // posodabljanje zapisa PRIIMKA prodajalca v pb
-        elseif (isset($_POST["do"]) && $_POST["do"] == "edit_priimek"):
+        elseif (isset($data["do"]) && $data["do"] == "edit_priimek"):
             ?>
             <h1>Posodobitev zapisa</h1>
             <?php
@@ -136,14 +173,14 @@ require_once '../../db/database_spletna.php';
                 // var_dump($_POST);
                 // var_dump($_SESSION["ime_prodajalca"]);
                 // die();
-                DBSpletna::updateLastName($_POST["id"], $_POST["priimek_prodajalca"]);
-                echo "Priimek uspešno posodobljen. <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
+                DBSpletna::updateLastName($data["id"], $data["priimek_prodajalca"]);
+                echo "Priimek uspešno posodobljen. <a href='$url'>Na prvo stran.</a></p>";
             } catch (Exception $e) {
                 echo "<p>Napaka pri zapisu: {$e->getMessage()}.</p>";
             }
         
         // posodabljanje zapisa EMAILA prodajalca v pb
-        elseif (isset($_POST["do"]) && $_POST["do"] == "edit_email"):
+        elseif (isset($data["do"]) && $data["do"] == "edit_email"):
             ?>
             <h1>Posodobitev zapisa</h1>
             <?php
@@ -151,14 +188,14 @@ require_once '../../db/database_spletna.php';
                 // var_dump($_POST);
                 // var_dump($_SESSION["ime_prodajalca"]);
                 // die();
-                DBSpletna::updateEmail($_POST["id"], $_POST["email_prodajalca"]);
-                echo "Email uspešno posodobljen. <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
+                DBSpletna::updateEmail($data["id"], $data["email_prodajalca"]);
+                echo "Email uspešno posodobljen. <a href='$url'>Na prvo stran.</a></p>";
             } catch (Exception $e) {
                 echo "<p>Napaka pri zapisu: {$e->getMessage()}.</p>";
             }
             
         // posodabljanje zapisa GESLA prodajalca v pb
-        elseif (isset($_POST["do"]) && $_POST["do"] == "edit_geslo"):
+        elseif (isset($data["do"]) && $data["do"] == "edit_geslo"):
             ?>
             <h1>Posodobitev zapisa</h1>
             <?php
@@ -167,46 +204,46 @@ require_once '../../db/database_spletna.php';
                 // var_dump($_SESSION["ime_prodajalca"]);
                 // die();
                 // password_hash("stranka", PASSWORD_DEFAULT)
-                DBSpletna::updatePassword($_POST["id"], password_hash($_POST["geslo_prodajalca"], PASSWORD_DEFAULT));
-                echo "Geslo uspešno posodobljeno. <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
+                DBSpletna::updatePassword($data["id"], password_hash($data["geslo_prodajalca"], PASSWORD_DEFAULT));
+                echo "Geslo uspešno posodobljeno. <a href='$url'>Na prvo stran.</a></p>";
             } catch (Exception $e) {
                 echo "<p>Napaka pri zapisu: {$e->getMessage()}.</p>";
             }
             
         // VNOS ZAPISA V PB: dodajanje prodajalca
-        elseif (isset($_POST["do"]) && $_POST["do"] == "add"):
+        elseif (isset($data["do"]) && $data["do"] == "add"):
             ?>
             <h1>Vnašanje zapisa</h1>
             <?php
             try {
-                DBSpletna::insertProdajalec($_POST["ime_prodajalca"], $_POST["priimek_prodajalca"], $_POST["email_prodajalca"], password_hash($_POST["geslo_prodajalca"], PASSWORD_DEFAULT));              
-                echo "Prodajalec uspešno dodan! <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
+                DBSpletna::insertProdajalec($data["ime_prodajalca"], $data["priimek_prodajalca"], $data["email_prodajalca"], password_hash($data["geslo_prodajalca"], PASSWORD_DEFAULT));              
+                echo "Prodajalec uspešno dodan! <a href='$url'>Na prvo stran.</a></p>";
             } catch (Exception $e) {
                 echo "<p>Napaka pri dodajanju prodajalca: {$e->getMessage()}.</p>";
             }
 
         // deaktiviranje prodajalca - TODO!!!
-        elseif (isset($_POST["do"]) && $_POST["do"] == "deaktiviraj_prodajalca"):
+        elseif (isset($data["do"]) && $data["do"] == "deaktiviraj_prodajalca"):
             ?>
             <h1>Deaktiviranje uporabniškega računa prodajalca</h1>
             <?php
             try {
-                DBSpletna::updateUserStatus($_POST["id"], "neaktiven");
-                $id_str = $_POST["id"];
-                echo "Prodajalec $id_str uspešno deaktiviran. <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
+                DBSpletna::updateUserStatus($data["id"], "neaktiven");
+                $id_str = $data["id"];
+                echo "Prodajalec $id_str uspešno deaktiviran. <a href='$url'>Na prvo stran.</a></p>";
             } catch (Exception $e) {
                 echo "<p>Napaka pri deaktiviranju: {$e->getMessage()}.</p>";
             }
             
         // aktiviranje prodajalca - TODO!!!
-        elseif (isset($_POST["do"]) && $_POST["do"] == "aktiviraj_prodajalca"):
+        elseif (isset($data["do"]) && $data["do"] == "aktiviraj_prodajalca"):
             ?>
             <h1>Aktiviranje uporabniškega računa prodajalca</h1>
             <?php
             try {
-                DBSpletna::updateUserStatus($_POST["id"], "aktiven");
-                $id_str = $_POST["id"];
-                echo "Prodajalec $id_str uspešno aktiviran. <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
+                DBSpletna::updateUserStatus($data["id"], "aktiven");
+                $id_str = $data["id"];
+                echo "Prodajalec $id_str uspešno aktiviran. <a href='$url'>Na prvo stran.</a></p>";
             } catch (Exception $e) {
                 echo "<p>Napaka pri aktiviranju: {$e->getMessage()}.</p>";
             }
@@ -214,13 +251,13 @@ require_once '../../db/database_spletna.php';
 // PRIKAZ VSEH ZAPISOV
         else:
             ?>
-            <form action="<?= htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="GET">
+            <form action="<?= $url ?>" method="GET">
                 <input type="hidden" name="do" value="edit" />
                 <input type="hidden" name="id" value="<?= $_SESSION["uporabnik_id"] ?>" />
                 <button type="submit">Uredi svoj profil</button>
             </form>
             <h1>Prodajalci</h1>
-            <h2><a href="<?= htmlspecialchars($_SERVER["PHP_SELF"]) . "?do=add" ?>">Dodaj prodajalca</a></h2>
+            <h2><a href="<?= $url . "?do=add" ?>">Dodaj prodajalca</a></h2>
             <?php
             try {
                 $vsi_prodajalci = DBSpletna::getAllRole("prodajalec");
@@ -230,14 +267,14 @@ require_once '../../db/database_spletna.php';
             }
 
             foreach ($vsi_prodajalci as $num => $row) {
-                $url = htmlspecialchars($_SERVER["PHP_SELF"]) . "?do=edit&id=" . $row["id"];
+                $url_klik = $url . "?do=edit&id=" . $row["id"];
                 $id_prodajalec = $row["id"];
                 $ime = $row["ime"];
                 $priimek = $row["priimek"];
                 $email = $row["email"];
                 $status = $row["status"];
 
-                echo "<p>$id_prodajalec: <b>$ime $priimek</b> [<a href='$url'>Uredi</a>]</p>\n";
+                echo "<p>$id_prodajalec: <b>$ime $priimek</b> [<a href='$url_klik'>Uredi</a>]</p>\n";
             }
         endif;
         ?>
