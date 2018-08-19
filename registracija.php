@@ -73,6 +73,9 @@ if (isset($data["do"]) && $data["do"] == "create_profile"){
 else{
     ?>
     <h1>Ustvarjanje novega uporabnika</h1>
+    <?php
+    echo "<p><a href='index.php'>Nazaj na prvo stran.</a></p>";
+    ?>
     <h2>Vnesite vsa naslednja polja:</h2>
         <form action="<?= $url ?>" method="post">
             <input type="hidden" name="do" value="create_profile" />
