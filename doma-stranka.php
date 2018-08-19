@@ -29,6 +29,7 @@ $artikli = DBSpletna::getAllArticles();
 //var_dump($artikli);
 
 $url = filter_input(INPUT_SERVER, "PHP_SELF", FILTER_SANITIZE_SPECIAL_CHARS);
+// var_dump($url);
 $validationRules = ['do' => [
         'filter' => FILTER_VALIDATE_REGEXP,
         'options' => [
@@ -42,7 +43,26 @@ $validationRules = ['do' => [
     'kolicina' => [
         'filter' => FILTER_VALIDATE_INT,
         'options' => ['min_range' => 0]
+    ],
+    'ime_stranke' => [
+        'filter' => FILTER_SANITIZE_STRING
+    ],
+    'priimek_stranke' => [
+        'filter' => FILTER_SANITIZE_STRING
+    ],
+    'email_stranke' => [
+        'filter' => FILTER_SANITIZE_EMAIL
+    ],
+    'geslo_stranke' => [
+        'filter' => FILTER_SANITIZE_STRING
+    ],
+    'telefon_stranke' => [
+        'filter' => FILTER_SANITIZE_STRING
+    ],
+    'naslov_stranke' => [
+        'filter' => FILTER_SANITIZE_STRING
     ]
+    
 ];
 $data = filter_input_array(INPUT_POST, $validationRules);
 // var_dump($data);
@@ -84,7 +104,7 @@ switch ($data["do"]) {
             <h1>Posodobitev zapisa</h1>
             <?php
             try {
-                DBSpletna::updateFirstName($_SESSION["uporabnik_id"], $_POST["ime_stranke"]);
+                DBSpletna::updateFirstName($_SESSION["uporabnik_id"], $data["ime_stranke"]);
                 echo "Ime uspešno posodobljeno.</p>";
             } catch (Exception $e) {
                 echo "<p>Napaka pri zapisu: {$e->getMessage()}.</p>";
@@ -95,7 +115,7 @@ switch ($data["do"]) {
             <h1>Posodobitev zapisa</h1>
             <?php
             try {
-                DBSpletna::updateLastName($_SESSION["uporabnik_id"], $_POST["priimek_stranke"]);
+                DBSpletna::updateLastName($_SESSION["uporabnik_id"], $data["priimek_stranke"]);
                 echo "Priimek uspešno posodobljen.</p>";
             } catch (Exception $e) {
                 echo "<p>Napaka pri zapisu: {$e->getMessage()}.</p>";
@@ -106,7 +126,7 @@ switch ($data["do"]) {
             <h1>Posodobitev zapisa</h1>
             <?php
             try {
-                DBSpletna::updateEmail($_SESSION["uporabnik_id"], $_POST["email_stranke"]);
+                DBSpletna::updateEmail($_SESSION["uporabnik_id"], $data["email_stranke"]);
                 echo "Email uspešno posodobljen.</p>";
             } catch (Exception $e) {
                 echo "<p>Napaka pri zapisu: {$e->getMessage()}.</p>";
@@ -118,8 +138,8 @@ switch ($data["do"]) {
             <?php
             try {
                 // password_hash("stranka", PASSWORD_DEFAULT)
-                DBSpletna::updatePassword($_SESSION["uporabnik_id"], password_hash($_POST["geslo_stranke"], PASSWORD_DEFAULT));
-                echo "Geslo uspešno posodobljeno. <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
+                DBSpletna::updatePassword($_SESSION["uporabnik_id"], password_hash($data["geslo_stranke"], PASSWORD_DEFAULT));
+                echo "Geslo uspešno posodobljeno.</p>";
             } catch (Exception $e) {
                 echo "<p>Napaka pri zapisu: {$e->getMessage()}.</p>";
             }
@@ -129,8 +149,8 @@ switch ($data["do"]) {
             <h1>Posodobitev zapisa</h1>
             <?php
             try {
-                DBSpletna::updatePhone($_SESSION["uporabnik_id"], $_POST["telefon_stranke"]);
-                echo "Telefon uspešno posodobljeno. <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
+                DBSpletna::updatePhone($_SESSION["uporabnik_id"], $data["telefon_stranke"]);
+                echo "Telefon uspešno posodobljeno.</p>";
             } catch (Exception $e) {
                 echo "<p>Napaka pri zapisu: {$e->getMessage()}.</p>";
             }
@@ -140,8 +160,8 @@ switch ($data["do"]) {
             <h1>Posodobitev zapisa</h1>
             <?php
             try {
-                DBSpletna::updateAddress($_SESSION["uporabnik_id"], $_POST["naslov_stranke"]);
-                echo "Naslov uspešno posodobljen. <a href='$_SERVER[PHP_SELF]'>Na prvo stran.</a></p>";
+                DBSpletna::updateAddress($_SESSION["uporabnik_id"], $data["naslov_stranke"]);
+                echo "Naslov uspešno posodobljen.</p>";
             } catch (Exception $e) {
                 echo "<p>Napaka pri zapisu: {$e->getMessage()}.</p>";
             }
