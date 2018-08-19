@@ -205,7 +205,7 @@ if ($data_get["do"] == "edit_profile" && isset($_SESSION["uporabnik_id"])) {
 
         <h1>Spletna trgovina - ML</h1>
         
-        <form action="../../odjava.php" method="get">
+        <form action="odjava.php" method="get">
             <input type="submit" value="Odjava">
         </form>
         <form action="<?= $url ?>" method="GET">
