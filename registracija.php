@@ -77,18 +77,18 @@ else{
         <form action="<?= $url ?>" method="post">
             <input type="hidden" name="do" value="create_profile" />
             
-            <label>Ime:</label>
-            <input type="text" name="ime_stranke" placeholder="Ime" /> <br />
-            <label>Priimek:</label>
-            <input type="text" name="priimek_stranke" placeholder="Priimek" /> <br />
-            <label>E-mail:</label>
-            <input type="text" name="email_stranke" placeholder="E-mail" /> <br />
-            <label>Geslo:</label>
-            <input type="password" name="geslo_stranke" placeholder="Geslo" /> <br />
-            <label>Telefon:</label>
-            <input type="text" name="telefon_stranke" placeholder="Telefonska številka" /> <br /> <br /> <br />
-            <label>Naslov:</label>
-            <textarea rows="5" cols="20" name="naslov_stranke" placeholder="Naslov"></textarea> <br /> <br /> 
+            <label class="label1">Ime:</label>
+            <input class="input1" type="text" name="ime_stranke" placeholder="Ime" /> <br />
+            <label class="label1">Priimek:</label>
+            <input class="input1" type="text" name="priimek_stranke" placeholder="Priimek" /> <br />
+            <label class="label1">E-mail:</label>
+            <input class="input1" type="text" name="email_stranke" placeholder="E-mail" /> <br />
+            <label class="label1">Geslo:</label>
+            <input class="input1" type="password" name="geslo_stranke" placeholder="Geslo" /> <br />
+            <label class="label1">Telefon:</label>
+            <input class="input1" type="text" name="telefon_stranke" placeholder="Telefonska številka" /> <br /> <br /> <br />
+            <label class="label1">Naslov:</label>
+            <textarea class="input1" rows="5" cols="20" name="naslov_stranke" placeholder="Naslov"></textarea> <br /> <br /> <br /> <br />  <br /> <br /> 
             
             <input type="submit" value="Ustvari uporabnika" />
         </form>

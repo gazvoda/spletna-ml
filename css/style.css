@@ -46,14 +46,14 @@
     background-color:#4095c6;
 }
 
-label {
+.label1 {
     width:70px;
     clear:left;
     text-align:right;
     padding-right:10px;
 }
 
-input, label {
+.input1, .label1 {
     float:left;
 }
 
