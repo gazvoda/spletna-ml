@@ -145,7 +145,7 @@ class DBSpletna {
     public static function getAllArticles() {
         $db = DBInit::getInstance();
         
-        $statement = $db->prepare("SELECT id, ime, opis, cena, zaloga FROM artikel");
+        $statement = $db->prepare("SELECT id, ime, opis, cena, zaloga, status FROM artikel");
         $statement->execute();
         
         return $statement->fetchAll();
@@ -161,12 +161,14 @@ class DBSpletna {
     }
     public static function insertArticle($ime, $opis, $cena) {
         $db = DBInit::getInstance();
+        $status = "aktiven";
         $zaloga = 100;
-        $statement = $db->prepare("INSERT INTO artikel (ime, opis, cena, zaloga) VALUES (:ime, :opis, :cena, :zaloga)");
+        $statement = $db->prepare("INSERT INTO artikel (ime, opis, cena, zaloga, status) VALUES (:ime, :opis, :cena, :zaloga, :status)");
         $statement->bindParam(":ime", $ime);
         $statement->bindParam(":opis", $opis);
         $statement->bindParam(":cena", $cena);
         $statement->bindParam(":zaloga", $zaloga);
+        $statement->bindParam(":status", $status);
         $statement->execute();
     }
     public static function updateImeArtikla($id, $ime) {
