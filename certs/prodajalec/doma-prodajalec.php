@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-$authorized_users = ["Ana"];
+$authorized_users = ["Mihael"];
 
 $client_cert = filter_input(INPUT_SERVER, "SSL_CLIENT_CERT");
 

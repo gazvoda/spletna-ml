@@ -10,7 +10,7 @@
             echo "Za ogled te strani morate biti prijavljeni, ali pa nimate ustreznih pooblastil";
         } else {
 
-        $authorized_users = ["Ana"];
+        $authorized_users = ["Mihael"];
 
         $client_cert = filter_input(INPUT_SERVER, "SSL_CLIENT_CERT");
         // var_dump($client_cert);
