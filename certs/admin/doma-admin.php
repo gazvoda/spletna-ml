@@ -9,6 +9,24 @@
 //$uporabnisko_ime = $_POST["uporabnisko_ime"];
 //$geslo = $_POST["geslo"];
 session_start();
+$authorized_users = ["Ana"];
+
+$client_cert = filter_input(INPUT_SERVER, "SSL_CLIENT_CERT");
+
+if ($client_cert == null) {
+    die('err: Spremenljivka SSL_CLIENT_CERT ni nastavljena.');
+}
+
+
+$cert_data = openssl_x509_parse($client_cert);
+$commonname = (is_array($cert_data['subject']['CN']) ?
+                $cert_data['subject']['CN'][0] : $cert_data['subject']['CN']);
+if (in_array($commonname, $authorized_users)) {
+
+//echo "<p>Vsebina certifikata: ";
+//var_dump($cert_data);
+
+
 //echo "Prijava uspesna za admina";
 if (!isset($_SESSION["uporabnik_id"])) {
     echo "Za ogled te strani morate biti prijavljeni!";
@@ -287,4 +305,8 @@ require_once '../../db/database_spletna.php';
 
 <?php
 
+}
+
+} else {
+    echo "$commonname ni avtoriziran uporabnik in nima dostopa do te strani.";
 }

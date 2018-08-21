@@ -1,5 +1,24 @@
 <?php
 session_start();
+
+$authorized_users = ["Ana"];
+
+$client_cert = filter_input(INPUT_SERVER, "SSL_CLIENT_CERT");
+
+if ($client_cert == null) {
+    die('err: Spremenljivka SSL_CLIENT_CERT ni nastavljena.');
+}
+
+
+$cert_data = openssl_x509_parse($client_cert);
+$commonname = (is_array($cert_data['subject']['CN']) ?
+                $cert_data['subject']['CN'][0] : $cert_data['subject']['CN']);
+if (in_array($commonname, $authorized_users)) {
+
+//echo "<p>Vsebina certifikata: ";
+//var_dump($cert_data);
+
+
 if (!isset($_SESSION["uporabnik_id"])) {
     echo "Za ogled te strani morate biti prijavljeni!";
 } elseif ($_SESSION["uporabnik_vloga"] == "prodajalec") {
@@ -600,3 +619,8 @@ require_once '../../db/database_spletna.php';
     </body>
 </html>
 <?php }
+
+
+} else {
+    echo "$commonname ni avtoriziran uporabnik in nima dostopa do te strani.";
+}
